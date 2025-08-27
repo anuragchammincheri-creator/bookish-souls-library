@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Catalog - Bookish Soul's Library</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f5f2;
+      color: #333;
+    }
+    header {
+      background: #4a6fa5;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    main {
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #2e3a59;
+    }
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .book-card {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .book-card img {
+      width: 100px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    .book-card h3 {
+      margin: 0.5rem 0;
+      font-size: 1.1rem;
+      color: #2e3a59;
+    }
+    .status {
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .available {
+      color: green;
+      font-weight: bold;
+    }
+    .borrowed {
+      color: red;
+      font-weight: bold;
+    }
+    footer {
+      margin-top: 3rem;
+      background: #4a6fa5;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>📚 Bookish Soul's Library - Catalog</header>
+  <main>
+    <h1>Book Catalog</h1>
+    <p style="text-align:center;">Browse books shared by the community</p>
+
+    <div class="book-grid">
+      <div class="book-card">
+        <img src="https://covers.openlibrary.org/b/id/8231856-L.jpg" alt="Book cover">
+        <h3>The Great Gatsby</h3>
+        <p>by F. Scott Fitzgerald</p>
+        <p class="status available">Available</p>
+      </div>
+
+      <div class="book-card">
+        <img src="https://covers.openlibrary.org/b/id/7222246-L.jpg" alt="Book cover">
+        <h3>1984</h3>
+        <p>by George Orwell</p>
+        <p class="status borrowed">Borrowed</p>
+      </div>
+
+      <div class="book-card">
+        <img src="https://covers.openlibrary.org/b/id/8319255-L.jpg" alt="Book cover">
+        <h3>Pride and Prejudice</h3>
+        <p>by Jane Austen</p>
+        <p class="status available">Available</p>
+      </div>
+    </div>
+  </main>
+  <footer>
+    &copy; 2025 Bookish Soul's Library
+  </footer>
+</body>
+      </html>

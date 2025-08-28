@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -59,8 +59,10 @@
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 400px;
+      max-width: 600px;
+      width: 100%;
       text-align: center;
+      margin-bottom: 2rem;
     }
 
     .profile-card img {
@@ -68,6 +70,26 @@
       height: 100px;
       border-radius: 50%;
       margin-bottom: 1rem;
+    }
+
+    h3 {
+      margin-top: 2rem;
+      color: #2e3a59;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0.5rem 0 1.5rem 0;
+    }
+
+    ul li {
+      background: #fff;
+      margin: 0.4rem 0;
+      padding: 0.7rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+      text-align: left;
     }
 
     footer {
@@ -87,14 +109,44 @@
     <a href="index.html">🏠 Home</a>
     <a href="catalog.html">📚 Catalog</a>
     <a href="profile.html">👤 Profile</a>
+    <a href="requests.html">📬 Requests</a>
   </nav>
 
   <main>
+    <!-- Profile Card -->
     <div class="profile-card">
       <img src="https://via.placeholder.com/100" alt="Profile Picture">
       <h2>John Doe</h2>
       <p><strong>Email:</strong> john@example.com</p>
       <p><strong>Books Owned:</strong> 5</p>
+    </div>
+
+    <!-- My Books -->
+    <div class="profile-card">
+      <h3>📖 My Books</h3>
+      <ul>
+        <li>The Alchemist</li>
+        <li>To Kill a Mockingbird</li>
+        <li>1984</li>
+      </ul>
+    </div>
+
+    <!-- Books Lent Out -->
+    <div class="profile-card">
+      <h3>📤 Books I’ve Lent Out</h3>
+      <ul>
+        <li>The Hobbit → Lent to <strong>Mary</strong></li>
+        <li>Inferno → Lent to <strong>James</strong></li>
+      </ul>
+    </div>
+
+    <!-- Books Borrowed -->
+    <div class="profile-card">
+      <h3>📥 Books I’ve Borrowed</h3>
+      <ul>
+        <li>Harry Potter (Owner: <strong>Alice</strong>)</li>
+        <li>Rich Dad Poor Dad (Owner: <strong>David</strong>)</li>
+      </ul>
     </div>
   </main>
 

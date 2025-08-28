@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Book Requests - Bookish Soul's Library</title>
+  <title>Requests - Bookish Soul's Library</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -12,6 +12,7 @@
       background: #f8f5f2;
       color: #333;
     }
+
     header {
       background: #4a6fa5;
       color: white;
@@ -19,93 +20,171 @@
       text-align: center;
       font-size: 1.5rem;
       font-weight: bold;
+    }
+
+    /* 🔹 NAVBAR STYLE */
+    .navbar {
+      background: #4a6fa5;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 0.8rem;
+      border-bottom: 3px solid #2e3a59;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: color 0.3s, background 0.3s;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .navbar a:hover {
+      background: white;
+      color: #4a6fa5;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .section-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 700px;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      color: #2e3a59;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      background: #f9f9f9;
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin: 0.5rem 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
     }
-    header a {
-      background: white;
-      color: #4a6fa5;
+
+    .actions button {
+      background: #4a6fa5;
+      color: white;
+      border: none;
       padding: 0.4rem 0.8rem;
-      border-radius: 8px;
-      text-decoration: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 0.5rem;
       font-size: 0.9rem;
-      font-weight: bold;
+      transition: background 0.3s;
     }
-    main {
-      padding: 2rem;
+
+    .actions button:hover {
+      background: #395682;
     }
-    h1 {
-      text-align: center;
-      color: #2e3a59;
-    }
-    .request-list {
-      margin-top: 2rem;
-      display: grid;
-      gap: 1rem;
-    }
-    .request-card {
-      background: white;
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .book-title {
-      font-weight: bold;
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-    .owner {
-      font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 0.3rem;
-    }
-    .status {
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-      font-weight: bold;
-    }
-    .pending {
-      color: orange;
-    }
+
     .approved {
       color: green;
+      font-weight: bold;
     }
-    .declined {
+
+    .rejected {
       color: red;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 3rem;
+      background: #4a6fa5;
+      color: white;
+      text-align: center;
+      padding: 1rem;
     }
   </style>
 </head>
 <body>
-  <header>
-    📬 My Book Requests
+  <header>📬 Book Requests</header>
+
+  <!-- 🔹 NAVBAR -->
+  <nav class="navbar">
     <a href="index.html">🏠 Home</a>
-  </header>
+    <a href="catalog.html">📚 Catalog</a>
+    <a href="profile.html">👤 Profile</a>
+    <a href="requests.html">📬 Requests</a>
+  </nav>
 
   <main>
-    <h1>Requests Overview</h1>
-    <div class="request-list">
-      <!-- Dummy Request 1 -->
-      <div class="request-card">
-        <div class="book-title">The Great Gatsby</div>
-        <div class="owner">Requested from: Alice</div>
-        <div class="status pending">Status: Pending</div>
-      </div>
+    <!-- Requests I Made -->
+    <div class="section-card">
+      <h2>📤 Requests I Made</h2>
+      <ul>
+        <li>
+          <span>“The Alchemist” from <strong>Alice</strong></span>
+          <span class="approved">✅ Approved</span>
+        </li>
+        <li>
+          <span>“Inferno” from <strong>David</strong></span>
+          <span class="rejected">❌ Rejected</span>
+        </li>
+      </ul>
+    </div>
 
-      <!-- Dummy Request 2 -->
-      <div class="request-card">
-        <div class="book-title">1984</div>
-        <div class="owner">Requested from: Bob</div>
-        <div class="status approved">Status: Approved ✅</div>
-      </div>
+    <!-- Requests I Received -->
+    <div class="section-card">
+      <h2>📥 Requests I Received</h2>
+      <ul>
+        <li>
+          <span><strong>Mary</strong> requested “The Hobbit”</span>
+          <div class="actions">
+            <button>Approve ✅</button>
+            <button>Reject ❌</button>
+          </div>
+        </li>
+        <li>
+          <span><strong>James</strong> requested “1984”</span>
+          <div class="actions">
+            <button>Approve ✅</button>
+            <button>Reject ❌</button>
+          </div>
+        </li>
+      </ul>
+    </div>
 
-      <!-- Dummy Request 3 -->
-      <div class="request-card">
-        <div class="book-title">Pride and Prejudice</div>
-        <div class="owner">Requested from: Clara</div>
-        <div class="status declined">Status: Declined ❌</div>
-      </div>
+    <!-- History -->
+    <div class="section-card">
+      <h2>📜 Request History</h2>
+      <ul>
+        <li>
+          “Harry Potter” → Borrowed by <strong>John</strong> from <strong>Alice</strong>
+        </li>
+        <li>
+          “Rich Dad Poor Dad” → Borrowed by <strong>David</strong> from <strong>Mary</strong>
+        </li>
+      </ul>
     </div>
   </main>
+
+  <footer>
+    &copy; 2025 Bookish Soul's Library
+  </footer>
 </body>
 </html>

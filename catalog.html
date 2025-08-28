@@ -86,12 +86,40 @@
       background: #2e3a59;
       color: white;
       }
+    .navbar {
+  background: #4a6fa5;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 0.8rem;
+  border-bottom: 3px solid #2e3a59;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: color 0.3s, background 0.3s;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+}
+
+.navbar a:hover {
+  background: white;
+  color: #4a6fa5;
+      }
   </style>
 </head>
 <body>
   <header>
   📚 Book Catalog 
   <a href="index.html" class="home-btn">🏠 Home</a>
+  <nav class="navbar">
+  <a href="index.html">🏠 Home</a>
+  <a href="catalog.html">📚 Catalog</a>
+  <a href="profile.html">👤 Profile</a>
+  </nav>
   </header>
   <main>
     <h1>Available Books</h1>

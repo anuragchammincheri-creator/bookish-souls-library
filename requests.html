@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Requests - Bookish Soul's Library</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f5f2;
+      color: #333;
+    }
+    header {
+      background: #4a6fa5;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header a {
+      background: white;
+      color: #4a6fa5;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    main {
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #2e3a59;
+    }
+    .request-list {
+      margin-top: 2rem;
+      display: grid;
+      gap: 1rem;
+    }
+    .request-card {
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .book-title {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .owner {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.3rem;
+    }
+    .status {
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      font-weight: bold;
+    }
+    .pending {
+      color: orange;
+    }
+    .approved {
+      color: green;
+    }
+    .declined {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    📬 My Book Requests
+    <a href="index.html">🏠 Home</a>
+  </header>
+
+  <main>
+    <h1>Requests Overview</h1>
+    <div class="request-list">
+      <!-- Dummy Request 1 -->
+      <div class="request-card">
+        <div class="book-title">The Great Gatsby</div>
+        <div class="owner">Requested from: Alice</div>
+        <div class="status pending">Status: Pending</div>
+      </div>
+
+      <!-- Dummy Request 2 -->
+      <div class="request-card">
+        <div class="book-title">1984</div>
+        <div class="owner">Requested from: Bob</div>
+        <div class="status approved">Status: Approved ✅</div>
+      </div>
+
+      <!-- Dummy Request 3 -->
+      <div class="request-card">
+        <div class="book-title">Pride and Prejudice</div>
+        <div class="owner">Requested from: Clara</div>
+        <div class="status declined">Status: Declined ❌</div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,104 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catalog - Bookish Soul's Library</title>
-<style>
-body { font-family: 'Poppins', sans-serif; margin:0; padding:0; background:#f8f5f2; color:#333; }
-header { background:#4a6fa5; color:white; padding:1rem; text-align:center; font-size:1.5rem; font-weight:bold; }
-.navbar { background:#4a6fa5; display:flex; justify-content:center; gap:1.5rem; padding:0.8rem; border-bottom:3px solid #2e3a59; }
-.navbar a { color:white; text-decoration:none; font-size:1.1rem; font-weight:bold; padding:0.3rem 0.6rem; border-radius:6px; }
-.navbar a:hover { background:white; color:#4a6fa5; }
-main { padding:2rem; }
-h1 { text-align:center; color:#2e3a59; }
-.catalog { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:1.5rem; margin-top:2rem; }
-.book-card { background:white; border-radius:10px; padding:1rem; box-shadow:0 2px 6px rgba(0,0,0,0.1); text-align:center; }
-.book-card h3 { margin:0.5rem 0 0.3rem; color:#2e3a59; }
-.book-card p { margin:0.2rem 0; }
-.book-card button { margin-top:0.5rem; padding:0.5rem 1rem; background:#4a6fa5; color:white; border:none; border-radius:6px; cursor:pointer; }
-.book-card button:hover { background:#2e3a59; }
-footer { margin-top:3rem; background:#4a6fa5; color:white; text-align:center; padding:1rem; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Catalog - Bookish Soul's Library</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f5f2;
+      color: #333;
+    }
+    header {
+      background: #4a6fa5;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header a {
+      background: white;
+      color: #4a6fa5;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    main {
+      padding: 2rem;
+    }
+    h1 {
+      color: #2e3a59;
+      text-align: center;
+    }
+    .book-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .book-card {
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .book-title {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .owner {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+    .status {
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      background: #4a6fa5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    button:hover {
+      background: #395682;
+    }
+  </style>
 </head>
 <body>
-<header>📚 Book Catalog</header>
-<nav class="navbar">
-  <a href="index.html">🏠 Home</a>
-  <a href="catalog.html">📚 Catalog</a>
-  <a href="profile.html">👤 Profile</a>
-</nav>
+  <header>
+    📚 Book Catalog
+    <a href="index.html">🏠 Home</a>
+  </header>
 
-<main>
-<h1>Available Books</h1>
-<div class="catalog" id="catalog"></div>
-</main>
-
-<footer>&copy; 2025 Bookish Soul's Library</footer>
-
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<script>
-// 🔹 Firebase configuration (your config)
-const firebaseConfig = {
-  apiKey: "AIzaSyDq44xc6BNCrS7CRusFGLlWENdhicbAOmY",
-  authDomain: "bookishsoulslibrary.firebaseapp.com",
-  projectId: "bookishsoulslibrary",
-  storageBucket: "bookishsoulslibrary.firebasestorage.app",
-  messagingSenderId: "774470210563",
-  appId: "1:774470210563:web:154c3eb951bc525fdbea36"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-const catalogDiv = document.getElementById('catalog');
-
-// Fetch books and render them
-db.collection('books').get().then(snapshot => {
-  snapshot.forEach(doc => {
-    const book = doc.data();
-
-    // Create owners dropdown
-    let ownersOptions = '';
-    book.owners.forEach(ownerId => {
-      const status = book.status[ownerId];
-      ownersOptions += `<option value="${ownerId}">${ownerId} (${status})</option>`;
-    });
-
-    // Render book card
-    catalogDiv.innerHTML += `
+  <main>
+    <h1>Available Books</h1>
+    <div class="book-list">
+      <!-- Dummy book 1 -->
       <div class="book-card">
-        <h3>${book.title}</h3>
-        <p>by ${book.author}</p>
-        <p>
-          Request from:
-          <select>${ownersOptions}</select>
-        </p>
-        <button onclick="requestBook('${doc.id}', this.previousElementSibling.querySelector('select').value)">
-          Request Book
-        </button>
+        <div class="book-title">The Great Gatsby</div>
+        <div class="owner">Owner: Alice</div>
+        <div class="status">Status: Available</div>
+        <button>Request Book</button>
       </div>
-    `;
-  });
-});
 
-// Request a book
-function requestBook(bookId, ownerId) {
-  const requesterId = prompt("Enter your user ID"); // Temporary until login is implemented
-  if(!requesterId) return;
+      <!-- Dummy book 2 -->
+      <div class="book-card">
+        <div class="book-title">1984</div>
+        <div class="owner">Owner: Bob</div>
+        <div class="status">Status: Borrowed</div>
+        <button disabled>Not Available</button>
+      </div>
 
-  db.collection('requests').add({
-    bookId: bookId,
-    ownerId: ownerId,
-    requesterId: requesterId,
-    status: "Pending"
-  }).then(()=> alert("Request sent!"))
-    .catch(err => alert("Error sending request: " + err));
-}
-</script>
+      <!-- Dummy book 3 -->
+      <div class="book-card">
+        <div class="book-title">Pride and Prejudice</div>
+        <div class="owner">Owner: Clara</div>
+        <div class="status">Status: Available</div>
+        <button>Request Book</button>
+      </div>
+    </div>
+  </main>
 </body>
 </html>

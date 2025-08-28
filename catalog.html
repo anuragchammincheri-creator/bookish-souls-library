@@ -12,6 +12,7 @@
       background: #f8f5f2;
       color: #333;
     }
+
     header {
       background: #4a6fa5;
       color: white;
@@ -20,19 +21,48 @@
       font-size: 1.5rem;
       font-weight: bold;
     }
+
+    /* NAVBAR */
+    .navbar {
+      background: #4a6fa5;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 0.8rem;
+      border-bottom: 3px solid #2e3a59;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: color 0.3s, background 0.3s;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .navbar a:hover {
+      background: white;
+      color: #4a6fa5;
+    }
+
     main {
       padding: 2rem;
     }
+
     h1 {
       text-align: center;
       color: #2e3a59;
     }
+
     .catalog {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 1.5rem;
       margin-top: 2rem;
     }
+
     .book-card {
       background: white;
       border-radius: 10px;
@@ -40,19 +70,23 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       text-align: center;
     }
+
     .book-card img {
       width: 100px;
       height: 150px;
       object-fit: cover;
       border-radius: 6px;
     }
+
     .book-card h3 {
       margin: 0.5rem 0 0.3rem;
       color: #2e3a59;
     }
+
     .book-card p {
       margin: 0.2rem 0;
     }
+
     .book-card button {
       margin-top: 0.5rem;
       padding: 0.5rem 1rem;
@@ -62,9 +96,16 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
     .book-card button:hover {
       background: #2e3a59;
     }
+
+    .book-card button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
     footer {
       margin-top: 3rem;
       background: #4a6fa5;
@@ -72,55 +113,18 @@
       text-align: center;
       padding: 1rem;
     }
-  .home-btn {
-      float: right;
-      background: white;
-      color: #4a6fa5;
-      text-decoration: none;
-      padding: 0.3rem 0.8rem;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: bold;
-    }
-    .home-btn:hover {
-      background: #2e3a59;
-      color: white;
-      }
-    .navbar {
-  background: #4a6fa5;
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  padding: 0.8rem;
-  border-bottom: 3px solid #2e3a59;
-}
-
-.navbar a {
-  color: white;
-  text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: bold;
-  transition: color 0.3s, background 0.3s;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-}
-
-.navbar a:hover {
-  background: white;
-  color: #4a6fa5;
-      }
   </style>
 </head>
 <body>
-  <header>
-  📚 Book Catalog 
-  <a href="index.html" class="home-btn">🏠 Home</a>
+  <header>📚 Book Catalog</header>
+
+  <!-- NAVBAR -->
   <nav class="navbar">
-  <a href="index.html">🏠 Home</a>
-  <a href="catalog.html">📚 Catalog</a>
-  <a href="profile.html">👤 Profile</a>
+    <a href="index.html">🏠 Home</a>
+    <a href="catalog.html">📚 Catalog</a>
+    <a href="profile.html">👤 Profile</a>
   </nav>
-  </header>
+
   <main>
     <h1>Available Books</h1>
     <div class="catalog">
@@ -132,6 +136,7 @@
         <p>Status: ✅ Available</p>
         <button>Request Book</button>
       </div>
+
       <!-- Book 2 -->
       <div class="book-card">
         <img src="https://covers.openlibrary.org/b/id/11153258-L.jpg" alt="1984">
@@ -140,6 +145,7 @@
         <p>Status: ❌ Borrowed</p>
         <button disabled>Not Available</button>
       </div>
+
       <!-- Book 3 -->
       <div class="book-card">
         <img src="https://covers.openlibrary.org/b/id/10523398-L.jpg" alt="To Kill a Mockingbird">
@@ -150,6 +156,7 @@
       </div>
     </div>
   </main>
+
   <footer>
     &copy; 2025 Bookish Soul's Library
   </footer>

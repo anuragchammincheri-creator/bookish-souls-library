@@ -166,38 +166,7 @@
       <div class="dropdown" id="notifDropdown">
         <h4>Notifications</h4>
         <ul id="notifList">
-          <li>
-            <img src="https://covers.openlibrary.org/b/id/8225261-S.jpg" alt="Pride and Prejudice">
-            <div class="notif-text">
-              <strong>Pride and Prejudice</strong>
-              <span>Owner: Anjali Sharma</span>
-              <em>Please return the book you borrowed</em>
-            </div>
-          </li>
-          <li>
-            <img src="https://covers.openlibrary.org/b/id/10523398-S.jpg" alt="To Kill a Mockingbird">
-            <div class="notif-text">
-              <strong>To Kill a Mockingbird</strong>
-              <span>Owner: Ravi Kumar</span>
-              <em>Your borrow request is approved</em>
-            </div>
-          </li>
-          <li>
-            <img src="https://covers.openlibrary.org/b/id/11153258-S.jpg" alt="1984">
-            <div class="notif-text">
-              <strong>1984</strong>
-              <span>Owner: Meera Nair</span>
-              <em>Owner is waiting for return</em>
-            </div>
-          </li>
-          <li>
-            <img src="https://covers.openlibrary.org/b/id/8231994-S.jpg" alt="The Great Gatsby">
-            <div class="notif-text">
-              <strong>The Great Gatsby</strong>
-              <span>Owner: Arjun Menon</span>
-              <em>Your request is pending approval</em>
-            </div>
-          </li>
+          <!-- Notifications injected by JS -->
         </ul>
       </div>
     </div>
@@ -226,13 +195,36 @@
       document.getElementById("notifDropdown").classList.toggle("active");
     }
 
-    // Update badge count
-    function updateBadge() {
-      const notifList = document.getElementById("notifList").children.length;
-      document.getElementById("notifBadge").textContent = notifList;
+    // Load notifications from localStorage
+    function loadNotifications() {
+      const notifList = document.getElementById("notifList");
+      notifList.innerHTML = "";
+
+      let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
+
+      if (requests.length === 0) {
+        notifList.innerHTML = "<li style='padding:1rem;text-align:center;color:#555;'>No notifications</li>";
+      } else {
+        requests.forEach(req => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <img src="${req.cover || 'https://via.placeholder.com/40x60'}" alt="${req.book}">
+            <div class="notif-text">
+              <strong>${req.book}</strong>
+              <span>Owner: ${req.owner}</span>
+              <em>${req.message || 'Please return the book you borrowed'}</em>
+            </div>
+          `;
+          notifList.appendChild(li);
+        });
+      }
+
+      // Update badge
+      document.getElementById("notifBadge").textContent = requests.length;
     }
 
-    updateBadge();
+    // Initial load
+    loadNotifications();
   </script>
 </body>
 </html>

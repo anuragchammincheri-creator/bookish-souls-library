@@ -52,9 +52,9 @@
       right: 0;
       top: 35px;
       background: white;
-      width: 320px;
-      max-height: 300px; /* 🔹 Limit height */
-      overflow-y: auto;  /* 🔹 Scroll when too many items */
+      width: 350px;
+      max-height: 300px;
+      overflow-y: auto;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       border-radius: 8px;
       z-index: 10;
@@ -70,7 +70,7 @@
       background: #4a6fa5;
       color: white;
       font-size: 1rem;
-      position: sticky; /* 🔹 Always visible */
+      position: sticky;
       top: 0;
     }
 
@@ -82,11 +82,11 @@
 
     .dropdown ul li {
       display: flex;
-      align-items: center;
       gap: 10px;
       padding: 0.8rem;
       border-bottom: 1px solid #eee;
       font-size: 0.9rem;
+      align-items: center;
     }
 
     .dropdown ul li img {
@@ -96,8 +96,23 @@
       border-radius: 4px;
     }
 
-    .dropdown ul li:last-child {
-      border-bottom: none;
+    .notif-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .notif-text strong {
+      color: #2e3a59;
+    }
+
+    .notif-text span {
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .notif-text em {
+      font-size: 0.8rem;
+      color: #d9534f; /* red tone for alerts */
     }
 
     .navbar {
@@ -153,42 +168,34 @@
         <ul id="notifList">
           <li>
             <img src="https://covers.openlibrary.org/b/id/8225261-S.jpg" alt="Pride and Prejudice">
-            <div>
-              <strong>Pride and Prejudice</strong><br>
-              Owner: Anjali Sharma<br>
-              <em>Please return</em>
+            <div class="notif-text">
+              <strong>Pride and Prejudice</strong>
+              <span>Owner: Anjali Sharma</span>
+              <em>Please return the book you borrowed</em>
             </div>
           </li>
           <li>
             <img src="https://covers.openlibrary.org/b/id/10523398-S.jpg" alt="To Kill a Mockingbird">
-            <div>
-              <strong>To Kill a Mockingbird</strong><br>
-              Owner: Ravi Kumar<br>
-              <em>Borrow request</em>
+            <div class="notif-text">
+              <strong>To Kill a Mockingbird</strong>
+              <span>Owner: Ravi Kumar</span>
+              <em>Your borrow request is approved</em>
             </div>
           </li>
           <li>
             <img src="https://covers.openlibrary.org/b/id/11153258-S.jpg" alt="1984">
-            <div>
-              <strong>1984</strong><br>
-              Owner: Meera Nair<br>
-              <em>Pending approval</em>
+            <div class="notif-text">
+              <strong>1984</strong>
+              <span>Owner: Meera Nair</span>
+              <em>Owner is waiting for return</em>
             </div>
           </li>
           <li>
             <img src="https://covers.openlibrary.org/b/id/8231994-S.jpg" alt="The Great Gatsby">
-            <div>
-              <strong>The Great Gatsby</strong><br>
-              Owner: Arjun Menon<br>
-              <em>Please return</em>
-            </div>
-          </li>
-          <li>
-            <img src="https://covers.openlibrary.org/b/id/240727-S.jpg" alt="Moby Dick">
-            <div>
-              <strong>Moby Dick</strong><br>
-              Owner: Kavya Pillai<br>
-              <em>Borrow request</em>
+            <div class="notif-text">
+              <strong>The Great Gatsby</strong>
+              <span>Owner: Arjun Menon</span>
+              <em>Your request is pending approval</em>
             </div>
           </li>
         </ul>
@@ -219,13 +226,12 @@
       document.getElementById("notifDropdown").classList.toggle("active");
     }
 
-    // 🔹 Auto-update badge based on number of notifications
+    // Update badge count
     function updateBadge() {
       const notifList = document.getElementById("notifList").children.length;
       document.getElementById("notifBadge").textContent = notifList;
     }
 
-    // Run once when page loads
     updateBadge();
   </script>
 </body>

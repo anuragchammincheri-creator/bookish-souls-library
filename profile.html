@@ -58,7 +58,7 @@
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 500px;
+      max-width: 700px;
       width: 100%;
       text-align: center;
       position: relative;
@@ -87,6 +87,26 @@
 
     .edit-btn:hover {
       background: #395682;
+    }
+
+    h3 {
+      margin-top: 1.5rem;
+      color: #2e3a59;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 0.3rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      background: #f1f1f1;
+      margin: 0.5rem 0;
+      padding: 0.6rem;
+      border-radius: 8px;
+      text-align: left;
     }
 
     /* 🔹 Modal (Edit Profile Popup) */
@@ -173,9 +193,24 @@
       <h2>John Doe</h2>
       <p><strong>Email:</strong> john@example.com</p>
       <p><strong>Date of Birth:</strong> 01 Jan 2000</p>
-      <p><strong>Books Owned:</strong> 5</p>
-      <p><strong>Books Lent:</strong> 2</p>
-      <p><strong>Books Borrowed:</strong> 1</p>
+
+      <h3>📚 My Books</h3>
+      <ul>
+        <li>The Great Gatsby</li>
+        <li>1984</li>
+        <li>To Kill a Mockingbird</li>
+      </ul>
+
+      <h3>📤 Books Lent</h3>
+      <ul>
+        <li>The Alchemist → <em>Borrowed by Sarah</em></li>
+        <li>Atomic Habits → <em>Borrowed by Mike</em></li>
+      </ul>
+
+      <h3>📥 Books Borrowed</h3>
+      <ul>
+        <li>Pride and Prejudice → <em>Owned by Emma</em></li>
+      </ul>
     </div>
   </main>
 

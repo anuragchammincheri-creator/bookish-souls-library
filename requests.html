@@ -1,45 +1,47 @@
 <script>
   function loadRequests() {
     let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
+
+    // 👉 Pre-fill dummy requests if empty
+    if (requests.length === 0) {
+      requests = [
+        "The Alchemist → Sarah",
+        "Atomic Habits → Mike"
+      ];
+      localStorage.setItem("returnRequests", JSON.stringify(requests));
+    }
+
     const list = document.getElementById("requestList");
     list.innerHTML = "";
-
-    if (requests.length === 0) {
-      list.innerHTML = "<p>No return requests yet 📭</p>";
-      return;
-    }
 
     requests.forEach((req, index) => {
       const li = document.createElement("li");
       li.innerHTML = `
-        ${req.book} → Borrower: ${req.borrower}
-        <button class="complete-btn" onclick="markComplete(${index})">✅ Mark as Returned</button>
+        ${req}
+        <button class="complete-btn" onclick="markComplete(${index}, '${req}')">✅ Mark as Returned</button>
       `;
       list.appendChild(li);
     });
   }
 
-  function markComplete(index) {
+  function markComplete(index, bookInfo) {
     let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
+    requests.splice(index, 1); // remove request
+    localStorage.setItem("returnRequests", JSON.stringify(requests));
+
+    // 👉 Move book back to "My Books" in Profile
     let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
     let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || [];
 
-    const returned = requests[index];
+    // remove from lentBooks
+    lentBooks = lentBooks.filter(b => !bookInfo.includes(b));
+    // add back to myBooks
+    myBooks.push(bookInfo.split("→")[0].trim());
 
-    // 1. Remove from requests
-    requests.splice(index, 1);
-    localStorage.setItem("returnRequests", JSON.stringify(requests));
-
-    // 2. Remove from lentBooks
-    lentBooks = lentBooks.filter(b => b.book !== returned.book);
+    localStorage.setItem("myBooks", JSON.stringify(myBooks));
     localStorage.setItem("lentBooks", JSON.stringify(lentBooks));
 
-    // 3. Add to myBooks
-    myBooks.push(returned.book);
-    localStorage.setItem("myBooks", JSON.stringify(myBooks));
-
-    loadRequests(); // refresh
-    alert(`✅ ${returned.book} returned and moved back to My Books.`);
+    loadRequests();
   }
 
   window.onload = loadRequests;

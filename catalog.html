@@ -5,120 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catalog - Bookish Soul's Library</title>
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f8f5f2;
-      color: #333;
-    }
-
-    header {
-      background: #4a6fa5;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
-    /* NAVBAR */
-    .navbar {
-      background: #4a6fa5;
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 0.8rem;
-      border-bottom: 3px solid #2e3a59;
-    }
-
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: bold;
-      transition: color 0.3s, background 0.3s;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-    }
-
-    .navbar a:hover {
-      background: white;
-      color: #4a6fa5;
-    }
-
-    main {
-      padding: 2rem;
-    }
-
-    h1 {
-      text-align: center;
-      color: #2e3a59;
-    }
-
-    .catalog {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .book-card {
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    .book-card img {
-      width: 100px;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-
-    .book-card h3 {
-      margin: 0.5rem 0 0.3rem;
-      color: #2e3a59;
-    }
-
-    .book-card p {
-      margin: 0.2rem 0;
-    }
-
-    .book-card button {
-      margin-top: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #4a6fa5;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .book-card button:hover {
-      background: #2e3a59;
-    }
-
-    .book-card button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
-    footer {
-      margin-top: 3rem;
-      background: #4a6fa5;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-    }
+    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f8f5f2; color: #333; }
+    header { background: #4a6fa5; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; }
+    .navbar { background: #4a6fa5; display: flex; justify-content: center; gap: 1.5rem; padding: 0.8rem; border-bottom: 3px solid #2e3a59; }
+    .navbar a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold; padding: 0.3rem 0.6rem; border-radius: 6px; transition: 0.3s; }
+    .navbar a:hover { background: white; color: #4a6fa5; }
+    main { padding: 2rem; }
+    h1 { text-align: center; color: #2e3a59; }
+    .catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .book-card { background: white; border-radius: 10px; padding: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; }
+    .book-card img { width: 100px; height: 150px; object-fit: cover; border-radius: 6px; }
+    .book-card h3 { margin: 0.5rem 0 0.3rem; color: #2e3a59; }
+    .book-card button { margin-top: 0.5rem; padding: 0.5rem 1rem; background: #4a6fa5; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    .book-card button:hover { background: #2e3a59; }
+    .book-card button:disabled { background: #ccc; cursor: not-allowed; }
+    footer { margin-top: 3rem; background: #4a6fa5; color: white; text-align: center; padding: 1rem; }
   </style>
 </head>
 <body>
   <header>📚 Book Catalog</header>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <a href="index.html">🏠 Home</a>
     <a href="catalog.html">📚 Catalog</a>
@@ -128,38 +34,53 @@
 
   <main>
     <h1>Available Books</h1>
-    <div class="catalog">
-      <!-- Book 1 -->
-      <div class="book-card">
-        <img src="https://covers.openlibrary.org/b/id/8225261-L.jpg" alt="Pride and Prejudice">
-        <h3>Pride and Prejudice</h3>
-        <p>by Jane Austen</p>
-        <p>Status: ✅ Available</p>
-        <button>Request Book</button>
-      </div>
-
-      <!-- Book 2 -->
-      <div class="book-card">
-        <img src="https://covers.openlibrary.org/b/id/11153258-L.jpg" alt="1984">
-        <h3>1984</h3>
-        <p>by George Orwell</p>
-        <p>Status: ❌ Borrowed</p>
-        <button disabled>Not Available</button>
-      </div>
-
-      <!-- Book 3 -->
-      <div class="book-card">
-        <img src="https://covers.openlibrary.org/b/id/10523398-L.jpg" alt="To Kill a Mockingbird">
-        <h3>To Kill a Mockingbird</h3>
-        <p>by Harper Lee</p>
-        <p>Status: ✅ Available</p>
-        <button>Request Book</button>
-      </div>
-    </div>
+    <div class="catalog" id="catalog"></div>
   </main>
 
   <footer>
     &copy; 2025 Bookish Soul's Library
   </footer>
+
+  <script>
+    const books = [
+      { title: "Pride and Prejudice", author: "Jane Austen", owner: "Alice", img: "https://covers.openlibrary.org/b/id/8225261-L.jpg" },
+      { title: "1984", author: "George Orwell", owner: "Bob", img: "https://covers.openlibrary.org/b/id/11153258-L.jpg" },
+      { title: "To Kill a Mockingbird", author: "Harper Lee", owner: "David", img: "https://covers.openlibrary.org/b/id/10523398-L.jpg" }
+    ];
+
+    function loadCatalog() {
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      const catalogDiv = document.getElementById("catalog");
+      catalogDiv.innerHTML = "";
+
+      books.forEach(book => {
+        let status = "available";
+        let latestReq = requests.find(r => r.book === book.title && r.status === "collected");
+        if (latestReq) status = "borrowed";
+
+        let card = document.createElement("div");
+        card.classList.add("book-card");
+        card.innerHTML = `
+          <img src="${book.img}" alt="${book.title}">
+          <h3>${book.title}</h3>
+          <p>by ${book.author}</p>
+          <p>Status: ${status === "available" ? "✅ Available" : "❌ Borrowed"}</p>
+          <button ${status === "borrowed" ? "disabled" : `onclick="requestBook('${book.title}', '${book.owner}')"`}>
+            ${status === "borrowed" ? "Not Available" : "Request Book"}
+          </button>
+        `;
+        catalogDiv.appendChild(card);
+      });
+    }
+
+    function requestBook(bookName, ownerName) {
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      requests.push({ book: bookName, owner: ownerName, status: "pending" });
+      localStorage.setItem("requests", JSON.stringify(requests));
+      window.location.href = "requests.html";
+    }
+
+    document.addEventListener("DOMContentLoaded", loadCatalog);
+  </script>
 </body>
-</html>
+  </html>

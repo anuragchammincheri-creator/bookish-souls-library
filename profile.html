@@ -240,7 +240,8 @@
 
       <h3>📥 Books Borrowed</h3>
       <ul id="borrowedBooks">
-        <li>Pride and Prejudice → <em>Emma</em></li>
+        <li>Pride and Prejudice → owner - Emma</li>
+        <li>The Hobbit → owner - Daniel</li>
       </ul>
     </div>
   </main>
@@ -281,13 +282,11 @@
       document.getElementById("editModal").style.display = "none";
     }
 
-    // 🔹 Remove book (only allowed in My Books)
     function removeBook(button) {
       const li = button.parentElement;
       li.remove();
     }
 
-    // 🔹 Request return of a lent book
     function requestReturn(button) {
       const li = button.parentElement;
       const bookInfo = li.innerText.replace("🔔 Request Return", "").trim();

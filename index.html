@@ -19,6 +19,7 @@
       text-align: center;
       font-size: 1.5rem;
       font-weight: bold;
+      position: relative;
     }
     main {
       display: flex;
@@ -61,10 +62,52 @@
       text-align: center;
       padding: 1rem;
     }
+    /* 🔔 Notification Styles */
+    .notification {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      cursor: pointer;
+      font-size: 1.3rem;
+    }
+    .badge {
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.7rem;
+      position: absolute;
+      top: -5px;
+      right: -8px;
+    }
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 10px;
+      top: 40px;
+      background: white;
+      color: black;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1rem;
+      width: 250px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .dropdown p {
+      margin: 0;
+    }
   </style>
 </head>
 <body>
-  <header>📚 Bookish Soul's Library</header>
+  <header>
+    📚 Bookish Soul's Library
+    <div class="notification" onclick="toggleDropdown()">
+      🔔 <span class="badge">1</span>
+    </div>
+    <div class="dropdown" id="dropdown">
+      <p>📬 Return requested: “The Alchemist”</p>
+    </div>
+  </header>
   <main>
     <h1>Welcome to Bookish Soul's Library</h1>
     <p>A cozy community where books find new readers.</p>
@@ -80,5 +123,11 @@
   <footer>
     &copy; 2025 Bookish Soul's Library
   </footer>
+  <script>
+    function toggleDropdown() {
+      let dd = document.getElementById("dropdown");
+      dd.style.display = (dd.style.display === "block") ? "none" : "block";
+    }
+  </script>
 </body>
 </html>

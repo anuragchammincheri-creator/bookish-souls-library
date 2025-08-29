@@ -213,8 +213,8 @@
   <nav class="navbar">
     <a href="index.html">🏠 Home</a>
     <a href="catalog.html">📚 Catalog</a>
-    <a href="profile.html">👤 Profile</a>
     <a href="requests.html">📬 Requests</a>
+    <a href="profile.html">👤 Profile</a>
   </nav>
 
   <main>
@@ -291,6 +291,11 @@
       const li = button.parentElement;
       const bookInfo = li.innerText.replace("🔔 Request Return", "").trim();
       alert("📬 Return request sent for: " + bookInfo);
+
+      // save to localStorage → Requests page
+      let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
+      requests.push(bookInfo);
+      localStorage.setItem("returnRequests", JSON.stringify(requests));
     }
   </script>
 </body>

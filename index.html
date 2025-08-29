@@ -125,4 +125,48 @@
       background: #4a6fa5;
       color: white;
       text-align: center;
-      padding
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    📚 Bookish Soul's Library
+    <div class="notification" onclick="toggleDropdown()">
+      <span class="bell">🔔</span>
+      <span class="notification-badge">2</span>
+      <div class="dropdown" id="notifDropdown">
+        <h4>Notifications</h4>
+        <ul>
+          <li>📖 <strong>Pride and Prejudice</strong> (Owner: Anjali Sharma) — Please return</li>
+          <li>📖 <strong>To Kill a Mockingbird</strong> (Owner: Ravi Kumar) — Borrow request</li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html">🏠 Home</a>
+    <a href="catalog.html">📚 Catalog</a>
+    <a href="profile.html">👤 Profile</a>
+    <a href="requests.html">📬 Requests</a>
+  </nav>
+
+  <main>
+    <h1>Welcome to Bookish Soul's Library</h1>
+    <p>A community-driven free library where readers share and borrow books.</p>
+    <p>Explore the catalog, request books, and connect with fellow book lovers 📚✨</p>
+  </main>
+
+  <footer>
+    &copy; 2025 Bookish Soul's Library
+  </footer>
+
+  <script>
+    function toggleDropdown() {
+      document.getElementById("notifDropdown").classList.toggle("active");
+    }
+  </script>
+</body>
+</html>

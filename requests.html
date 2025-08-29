@@ -1,151 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Requests - Bookish Soul's Library</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f8f5f2;
-      color: #333;
+<script>
+  function loadRequests() {
+    let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
+    const list = document.getElementById("requestList");
+    list.innerHTML = "";
+
+    if (requests.length === 0) {
+      list.innerHTML = "<p>No return requests yet 📭</p>";
+      return;
     }
 
-    header {
-      background: #4a6fa5;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
+    requests.forEach((req, index) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        ${req.book} → Borrower: ${req.borrower}
+        <button class="complete-btn" onclick="markComplete(${index})">✅ Mark as Returned</button>
+      `;
+      list.appendChild(li);
+    });
+  }
 
-    .navbar {
-      background: #4a6fa5;
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 0.8rem;
-      border-bottom: 3px solid #2e3a59;
-    }
+  function markComplete(index) {
+    let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
+    let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
+    let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || [];
 
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: bold;
-      transition: color 0.3s, background 0.3s;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-    }
+    const returned = requests[index];
 
-    .navbar a:hover {
-      background: white;
-      color: #4a6fa5;
-    }
+    // 1. Remove from requests
+    requests.splice(index, 1);
+    localStorage.setItem("returnRequests", JSON.stringify(requests));
 
-    main {
-      padding: 2rem;
-      max-width: 800px;
-      margin: auto;
-    }
+    // 2. Remove from lentBooks
+    lentBooks = lentBooks.filter(b => b.book !== returned.book);
+    localStorage.setItem("lentBooks", JSON.stringify(lentBooks));
 
-    h1 {
-      text-align: center;
-      color: #2e3a59;
-      margin-bottom: 2rem;
-    }
+    // 3. Add to myBooks
+    myBooks.push(returned.book);
+    localStorage.setItem("myBooks", JSON.stringify(myBooks));
 
-    ul {
-      list-style: none;
-      padding: 0;
-    }
+    loadRequests(); // refresh
+    alert(`✅ ${returned.book} returned and moved back to My Books.`);
+  }
 
-    ul li {
-      background: white;
-      padding: 1rem;
-      margin: 0.8rem 0;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .complete-btn {
-      background: #27ae60;
-      color: white;
-      border: none;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .complete-btn:hover {
-      background: #1e8449;
-    }
-
-    footer {
-      margin-top: 3rem;
-      background: #4a6fa5;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-    }
-  </style>
-</head>
-<body>
-  <header>📬 Book Return Requests</header>
-
-  <nav class="navbar">
-    <a href="index.html">🏠 Home</a>
-    <a href="catalog.html">📚 Catalog</a>
-    <a href="requests.html">📬 Requests</a>
-    <a href="profile.html">👤 Profile</a>
-  </nav>
-
-  <main>
-    <h1>Pending Return Requests</h1>
-    <ul id="requestList"></ul>
-  </main>
-
-  <footer>
-    &copy; 2025 Bookish Soul's Library
-  </footer>
-
-  <script>
-    function loadRequests() {
-      let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
-      const list = document.getElementById("requestList");
-      list.innerHTML = "";
-
-      if (requests.length === 0) {
-        list.innerHTML = "<p>No return requests yet 📭</p>";
-        return;
-      }
-
-      requests.forEach((req, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          ${req}
-          <button class="complete-btn" onclick="markComplete(${index})">✅ Mark as Returned</button>
-        `;
-        list.appendChild(li);
-      });
-    }
-
-    function markComplete(index) {
-      let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
-      requests.splice(index, 1); // remove this request
-      localStorage.setItem("returnRequests", JSON.stringify(requests));
-      loadRequests(); // reload list
-    }
-
-    // load when page opens
-    window.onload = loadRequests;
-  </script>
-</body>
-</html>
+  window.onload = loadRequests;
+</script>

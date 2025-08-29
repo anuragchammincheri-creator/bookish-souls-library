@@ -22,7 +22,6 @@
       font-weight: bold;
     }
 
-    /* 🔹 NAVBAR STYLE */
     .navbar {
       background: #4a6fa5;
       display: flex;
@@ -59,37 +58,93 @@
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 600px;
+      max-width: 500px;
       width: 100%;
       text-align: center;
-      margin-bottom: 2rem;
+      position: relative;
     }
 
     .profile-card img {
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
       margin-bottom: 1rem;
+      object-fit: cover;
     }
 
-    h3 {
-      margin-top: 2rem;
+    .edit-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #4a6fa5;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .edit-btn:hover {
+      background: #395682;
+    }
+
+    /* 🔹 Modal (Edit Profile Popup) */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
       color: #2e3a59;
     }
 
-    ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0.5rem 0 1.5rem 0;
+    .modal-content label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+      text-align: left;
     }
 
-    ul li {
-      background: #fff;
-      margin: 0.4rem 0;
-      padding: 0.7rem;
+    .modal-content input,
+    .modal-content textarea {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
       border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-      text-align: left;
+    }
+
+    .modal-content button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .save-btn {
+      background: #4a6fa5;
+      color: white;
+    }
+
+    .cancel-btn {
+      background: #ccc;
+      margin-left: 0.5rem;
     }
 
     footer {
@@ -104,7 +159,6 @@
 <body>
   <header>👤 My Profile</header>
 
-  <!-- 🔹 NAVBAR -->
   <nav class="navbar">
     <a href="index.html">🏠 Home</a>
     <a href="catalog.html">📚 Catalog</a>
@@ -113,45 +167,53 @@
   </nav>
 
   <main>
-    <!-- Profile Card -->
     <div class="profile-card">
-      <img src="https://via.placeholder.com/100" alt="Profile Picture">
+      <button class="edit-btn" onclick="openModal()">✏️ Edit Profile</button>
+      <img src="https://via.placeholder.com/120" alt="Profile Picture">
       <h2>John Doe</h2>
       <p><strong>Email:</strong> john@example.com</p>
+      <p><strong>Date of Birth:</strong> 01 Jan 2000</p>
       <p><strong>Books Owned:</strong> 5</p>
-    </div>
-
-    <!-- My Books -->
-    <div class="profile-card">
-      <h3>📖 My Books</h3>
-      <ul>
-        <li>The Alchemist</li>
-        <li>To Kill a Mockingbird</li>
-        <li>1984</li>
-      </ul>
-    </div>
-
-    <!-- Books Lent Out -->
-    <div class="profile-card">
-      <h3>📤 Books I’ve Lent Out</h3>
-      <ul>
-        <li>The Hobbit → Lent to <strong>Mary</strong></li>
-        <li>Inferno → Lent to <strong>James</strong></li>
-      </ul>
-    </div>
-
-    <!-- Books Borrowed -->
-    <div class="profile-card">
-      <h3>📥 Books I’ve Borrowed</h3>
-      <ul>
-        <li>Harry Potter (Owner: <strong>Alice</strong>)</li>
-        <li>Rich Dad Poor Dad (Owner: <strong>David</strong>)</li>
-      </ul>
+      <p><strong>Books Lent:</strong> 2</p>
+      <p><strong>Books Borrowed:</strong> 1</p>
     </div>
   </main>
+
+  <!-- 🔹 Edit Profile Modal -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <h2>Edit Profile</h2>
+      <label>Profile Photo:</label>
+      <input type="file" />
+
+      <label>Username:</label>
+      <input type="text" placeholder="Enter new name" />
+
+      <label>Email:</label>
+      <input type="email" placeholder="Enter new email" />
+
+      <label>Date of Birth:</label>
+      <input type="date" />
+
+      <label>My Books (comma separated):</label>
+      <textarea placeholder="Enter your books"></textarea>
+
+      <button class="save-btn" onclick="closeModal()">Save Changes</button>
+      <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
 
   <footer>
     &copy; 2025 Bookish Soul's Library
   </footer>
+
+  <script>
+    function openModal() {
+      document.getElementById("editModal").style.display = "flex";
+    }
+    function closeModal() {
+      document.getElementById("editModal").style.display = "none";
+    }
+  </script>
 </body>
 </html>

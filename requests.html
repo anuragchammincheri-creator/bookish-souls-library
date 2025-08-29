@@ -5,126 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Requests - Bookish Soul's Library</title>
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f8f5f2;
-      color: #333;
-    }
-
-    header {
-      background: #4a6fa5;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
-    /* 🔹 NAVBAR STYLE */
-    .navbar {
-      background: #4a6fa5;
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 0.8rem;
-      border-bottom: 3px solid #2e3a59;
-    }
-
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: bold;
-      transition: color 0.3s, background 0.3s;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-    }
-
-    .navbar a:hover {
-      background: white;
-      color: #4a6fa5;
-    }
-
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-    }
-
-    .section-card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 700px;
-      width: 100%;
-      margin-bottom: 2rem;
-    }
-
-    h2 {
-      color: #2e3a59;
-      margin-bottom: 1rem;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    li {
-      background: #f9f9f9;
-      padding: 0.8rem;
-      border-radius: 8px;
-      margin: 0.5rem 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-    }
-
-    .actions button {
-      background: #4a6fa5;
-      color: white;
-      border: none;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-left: 0.5rem;
-      font-size: 0.9rem;
-      transition: background 0.3s;
-    }
-
-    .actions button:hover {
-      background: #395682;
-    }
-
-    .approved {
-      color: green;
-      font-weight: bold;
-    }
-
-    .rejected {
-      color: red;
-      font-weight: bold;
-    }
-
-    footer {
-      margin-top: 3rem;
-      background: #4a6fa5;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-    }
+    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f8f5f2; color: #333; }
+    header { background: #4a6fa5; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; }
+    .navbar { background: #4a6fa5; display: flex; justify-content: center; gap: 1.5rem; padding: 0.8rem; border-bottom: 3px solid #2e3a59; }
+    .navbar a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold; padding: 0.3rem 0.6rem; border-radius: 6px; transition: 0.3s; }
+    .navbar a:hover { background: white; color: #4a6fa5; }
+    main { display: flex; flex-direction: column; align-items: center; padding: 2rem; }
+    .section-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 700px; width: 100%; margin-bottom: 2rem; }
+    h2 { color: #2e3a59; margin-bottom: 1rem; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li { background: #f9f9f9; padding: 0.8rem; border-radius: 8px; margin: 0.5rem 0; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+    .actions button { background: #4a6fa5; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; margin-left: 0.5rem; font-size: 0.9rem; transition: 0.3s; }
+    .actions button:hover { background: #395682; }
+    .approved { color: green; font-weight: bold; }
+    .rejected { color: red; font-weight: bold; }
+    .pending { color: orange; font-weight: bold; }
+    .collected { color: blue; font-weight: bold; }
+    footer { margin-top: 3rem; background: #4a6fa5; color: white; text-align: center; padding: 1rem; }
   </style>
 </head>
 <body>
   <header>📬 Book Requests</header>
 
-  <!-- 🔹 NAVBAR -->
   <nav class="navbar">
     <a href="index.html">🏠 Home</a>
     <a href="catalog.html">📚 Catalog</a>
@@ -133,58 +35,74 @@
   </nav>
 
   <main>
-    <!-- Requests I Made -->
     <div class="section-card">
       <h2>📤 Requests I Made</h2>
-      <ul>
-        <li>
-          <span>“The Alchemist” from <strong>Alice</strong></span>
-          <span class="approved">✅ Approved</span>
-        </li>
-        <li>
-          <span>“Inferno” from <strong>David</strong></span>
-          <span class="rejected">❌ Rejected</span>
-        </li>
-      </ul>
+      <ul id="made-requests"></ul>
     </div>
 
-    <!-- Requests I Received -->
     <div class="section-card">
       <h2>📥 Requests I Received</h2>
-      <ul>
-        <li>
-          <span><strong>Mary</strong> requested “The Hobbit”</span>
-          <div class="actions">
-            <button>Approve ✅</button>
-            <button>Reject ❌</button>
-          </div>
-        </li>
-        <li>
-          <span><strong>James</strong> requested “1984”</span>
-          <div class="actions">
-            <button>Approve ✅</button>
-            <button>Reject ❌</button>
-          </div>
-        </li>
-      </ul>
-    </div>
-
-    <!-- History -->
-    <div class="section-card">
-      <h2>📜 Request History</h2>
-      <ul>
-        <li>
-          “Harry Potter” → Borrowed by <strong>John</strong> from <strong>Alice</strong>
-        </li>
-        <li>
-          “Rich Dad Poor Dad” → Borrowed by <strong>David</strong> from <strong>Mary</strong>
-        </li>
-      </ul>
+      <ul id="received-requests"></ul>
     </div>
   </main>
 
   <footer>
     &copy; 2025 Bookish Soul's Library
   </footer>
+
+  <script>
+    function loadRequests() {
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      const madeList = document.getElementById("made-requests");
+      const receivedList = document.getElementById("received-requests");
+      madeList.innerHTML = "";
+      receivedList.innerHTML = "";
+
+      requests.forEach((req, index) => {
+        // Requests I Made
+        let li = document.createElement("li");
+        li.innerHTML = `“${req.book}” from <strong>${req.owner}</strong> 
+                        <span class="${req.status}">(${req.status})</span>`;
+        if (req.status === "approved") {
+          li.innerHTML += `<div class="actions"><button onclick="markCollected(${index})">Mark as Collected 📖</button></div>`;
+        }
+        madeList.appendChild(li);
+
+        // Requests I Received (simulate that current user is the owner)
+        let liR = document.createElement("li");
+        liR.innerHTML = `<span><strong>User</strong> requested “${req.book}”</span>`;
+        if (req.status === "pending") {
+          liR.innerHTML += `<div class="actions">
+            <button onclick="approveRequest(${index})">Approve ✅</button>
+            <button onclick="rejectRequest(${index})">Reject ❌</button>
+          </div>`;
+        }
+        receivedList.appendChild(liR);
+      });
+    }
+
+    function approveRequest(index) {
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      requests[index].status = "approved";
+      localStorage.setItem("requests", JSON.stringify(requests));
+      loadRequests();
+    }
+
+    function rejectRequest(index) {
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      requests[index].status = "rejected";
+      localStorage.setItem("requests", JSON.stringify(requests));
+      loadRequests();
+    }
+
+    function markCollected(index) {
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      requests[index].status = "collected";
+      localStorage.setItem("requests", JSON.stringify(requests));
+      loadRequests();
+    }
+
+    document.addEventListener("DOMContentLoaded", loadRequests);
+  </script>
 </body>
 </html>

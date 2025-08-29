@@ -165,9 +165,7 @@
       <span class="notification-badge" id="notifBadge">0</span>
       <div class="dropdown" id="notifDropdown">
         <h4>Notifications</h4>
-        <ul id="notifList">
-          <!-- Notifications injected by JS -->
-        </ul>
+        <ul id="notifList"></ul>
       </div>
     </div>
   </header>
@@ -201,18 +199,23 @@
       notifList.innerHTML = "";
 
       let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
+      let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar"; 
+      // ⚠️ later this will come from Firebase Auth
 
-      if (requests.length === 0) {
+      // Show only requests where this user is the borrower
+      let myNotifications = requests.filter(req => req.borrower === currentUser);
+
+      if (myNotifications.length === 0) {
         notifList.innerHTML = "<li style='padding:1rem;text-align:center;color:#555;'>No notifications</li>";
       } else {
-        requests.forEach(req => {
+        myNotifications.forEach(req => {
           const li = document.createElement("li");
           li.innerHTML = `
             <img src="${req.cover || 'https://via.placeholder.com/40x60'}" alt="${req.book}">
             <div class="notif-text">
               <strong>${req.book}</strong>
               <span>Owner: ${req.owner}</span>
-              <em>${req.message || 'Please return the book you borrowed'}</em>
+              <em>${req.message || 'Owner requests you to return this book'}</em>
             </div>
           `;
           notifList.appendChild(li);
@@ -220,10 +223,10 @@
       }
 
       // Update badge
-      document.getElementById("notifBadge").textContent = requests.length;
+      document.getElementById("notifBadge").textContent = myNotifications.length;
     }
 
-    // Initial load
+    // Run once on page load
     loadNotifications();
   </script>
 </body>

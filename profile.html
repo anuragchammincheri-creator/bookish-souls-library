@@ -107,9 +107,40 @@
       padding: 0.6rem;
       border-radius: 8px;
       text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    /* 🔹 Modal (Edit Profile Popup) */
+    .remove-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .remove-btn:hover {
+      background: #c0392b;
+    }
+
+    .request-btn {
+      background: #f39c12;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .request-btn:hover {
+      background: #d35400;
+    }
+
+    /* 🔹 Modal */
     .modal {
       display: none;
       position: fixed;
@@ -195,21 +226,21 @@
       <p><strong>Date of Birth:</strong> 01 Jan 2000</p>
 
       <h3>📚 My Books</h3>
-      <ul>
-        <li>The Great Gatsby</li>
-        <li>1984</li>
-        <li>To Kill a Mockingbird</li>
+      <ul id="myBooks">
+        <li>The Great Gatsby <button class="remove-btn" onclick="removeBook(this)">❌</button></li>
+        <li>1984 <button class="remove-btn" onclick="removeBook(this)">❌</button></li>
+        <li>To Kill a Mockingbird <button class="remove-btn" onclick="removeBook(this)">❌</button></li>
       </ul>
 
       <h3>📤 Books Lent</h3>
-      <ul>
-        <li>The Alchemist → <em>Borrowed by Sarah</em></li>
-        <li>Atomic Habits → <em>Borrowed by Mike</em></li>
+      <ul id="lentBooks">
+        <li>The Alchemist → <em>Sarah</em> <button class="request-btn" onclick="requestReturn(this)">🔔 Request Return</button></li>
+        <li>Atomic Habits → <em>Mike</em> <button class="request-btn" onclick="requestReturn(this)">🔔 Request Return</button></li>
       </ul>
 
       <h3>📥 Books Borrowed</h3>
-      <ul>
-        <li>Pride and Prejudice → <em>Owned by Emma</em></li>
+      <ul id="borrowedBooks">
+        <li>Pride and Prejudice → <em>Emma</em></li>
       </ul>
     </div>
   </main>
@@ -248,6 +279,19 @@
     }
     function closeModal() {
       document.getElementById("editModal").style.display = "none";
+    }
+
+    // 🔹 Remove book (only allowed in My Books)
+    function removeBook(button) {
+      const li = button.parentElement;
+      li.remove();
+    }
+
+    // 🔹 Request return of a lent book
+    function requestReturn(button) {
+      const li = button.parentElement;
+      const bookInfo = li.innerText.replace("🔔 Request Return", "").trim();
+      alert("📬 Return request sent for: " + bookInfo);
     }
   </script>
 </body>

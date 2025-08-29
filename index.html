@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bookish Soul's Library</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookish Soul's Library - Home</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -12,6 +12,7 @@
       background: #f8f5f2;
       color: #333;
     }
+
     header {
       background: #4a6fa5;
       color: white;
@@ -19,42 +20,55 @@
       text-align: center;
       font-size: 1.5rem;
       font-weight: bold;
-      position: relative;
     }
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-    }
-    h1 {
-      color: #2e3a59;
-    }
-    .search-box {
-      margin: 1rem 0;
-    }
-    input {
-      padding: 0.7rem;
-      width: 300px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-    }
-    nav {
-      margin-top: 2rem;
-    }
-    nav a {
-      display: inline-block;
-      margin: 0 10px;
-      padding: 0.5rem 1rem;
+
+    .navbar {
       background: #4a6fa5;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 0.8rem;
+      border-bottom: 3px solid #2e3a59;
+    }
+
+    .navbar a {
       color: white;
       text-decoration: none;
-      border-radius: 8px;
+      font-size: 1.1rem;
       font-weight: bold;
+      transition: color 0.3s, background 0.3s;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
     }
-    nav a:hover {
-      background: #395682;
+
+    .navbar a:hover {
+      background: white;
+      color: #4a6fa5;
     }
+
+    main {
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2e3a59;
+    }
+
+    .notification-box {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem auto;
+      max-width: 600px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .notification-box h3 {
+      margin-top: 0;
+      color: #4a6fa5;
+    }
+
     footer {
       margin-top: 3rem;
       background: #4a6fa5;
@@ -62,72 +76,42 @@
       text-align: center;
       padding: 1rem;
     }
-    /* 🔔 Notification Styles */
-    .notification {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      cursor: pointer;
-      font-size: 1.3rem;
-    }
-    .badge {
-      background: red;
-      color: white;
-      border-radius: 50%;
-      padding: 0.2rem 0.5rem;
-      font-size: 0.7rem;
-      position: absolute;
-      top: -5px;
-      right: -8px;
-    }
-    .dropdown {
-      display: none;
-      position: absolute;
-      right: 10px;
-      top: 40px;
-      background: white;
-      color: black;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 1rem;
-      width: 250px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .dropdown p {
-      margin: 0;
-    }
   </style>
 </head>
 <body>
-  <header>
-    📚 Bookish Soul's Library
-    <div class="notification" onclick="toggleDropdown()">
-      🔔 <span class="badge">1</span>
-    </div>
-    <div class="dropdown" id="dropdown">
-      <p>📬 Return requested: “The Alchemist”</p>
-    </div>
-  </header>
+  <header>📚 Bookish Soul's Library</header>
+
+  <nav class="navbar">
+    <a href="index.html">🏠 Home</a>
+    <a href="catalog.html">📚 Catalog</a>
+    <a href="profile.html">👤 Profile</a>
+    <a href="requests.html">📬 Requests</a>
+  </nav>
+
   <main>
-    <h1>Welcome to Bookish Soul's Library</h1>
-    <p>A cozy community where books find new readers.</p>
-    <div class="search-box">
-      <input type="text" placeholder="🔍 Search for a book..." />
+    <h1>Welcome back to Bookish Soul's Library</h1>
+    <p style="text-align:center;">Here are your latest notifications:</p>
+
+    <!-- Example Return Request Notification -->
+    <div class="notification-box">
+      <h3>🔔 Return Request</h3>
+      <p><strong>Book:</strong> Pride and Prejudice</p>
+      <p><strong>Owner:</strong> Anjali Sharma</p>
+      <p>Status: Please return this book to the owner.</p>
     </div>
-    <nav>
-      <a href="catalog.html">📖 Catalog</a>
-      <a href="profile.html">👤 Profile</a>
-      <a href="requests.html">📬 Requests</a>
-    </nav>
+
+    <!-- Example Borrow Request Notification -->
+    <div class="notification-box">
+      <h3>📬 Borrow Request</h3>
+      <p><strong>User:</strong> Rahul Mehta</p>
+      <p><strong>Book:</strong> To Kill a Mockingbird</p>
+      <p>is requesting to borrow this book from you.</p>
+    </div>
+
   </main>
+
   <footer>
     &copy; 2025 Bookish Soul's Library
   </footer>
-  <script>
-    function toggleDropdown() {
-      let dd = document.getElementById("dropdown");
-      dd.style.display = (dd.style.display === "block") ? "none" : "block";
-    }
-  </script>
 </body>
 </html>

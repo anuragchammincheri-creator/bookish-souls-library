@@ -1,34 +1,128 @@
-<script>
-function openModal() {
-  document.getElementById("editModal").style.display = "flex";
-}
-function closeModal() {
-  document.getElementById("editModal").style.display = "none";
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Bookish Soul's Library</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f5f2;
+      color: #333;
+    }
+    header {
+      background: #4a6fa5;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .navbar {
+      background: #4a6fa5;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 0.8rem;
+      border-bottom: 3px solid #2e3a59;
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: color 0.3s, background 0.3s;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+    }
+    .navbar a:hover {
+      background: white;
+      color: #4a6fa5;
+    }
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #2e3a59;
+      margin-bottom: 2rem;
+    }
+    section {
+      margin-bottom: 2rem;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    ul li {
+      background: white;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    footer {
+      margin-top: 3rem;
+      background: #4a6fa5;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>👤 My Profile</header>
+  <nav class="navbar">
+    <a href="index.html">🏠 Home</a>
+    <a href="catalog.html">📚 Catalog</a>
+    <a href="requests.html">📬 Requests</a>
+    <a href="profile.html">👤 Profile</a>
+  </nav>
 
-function removeBook(button) {
-  const li = button.parentElement;
-  li.remove();
-}
+  <main>
+    <h1>Welcome, <span id="username">Reader</span></h1>
 
-function requestReturn(button) {
-  const li = button.parentElement;
-  const bookName = li.childNodes[0].nodeValue.trim();
-  const borrower = li.querySelector("em").innerText;
+    <section>
+      <h2>📚 My Books</h2>
+      <ul id="myBooksList"></ul>
+    </section>
 
-  // Build a structured request
-  let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
-  requests.push({
-    book: bookName,
-    borrower: borrower,
-    owner: "John Doe" // ⚠️ later replace with Firebase currentUser
-  });
-  localStorage.setItem("returnRequests", JSON.stringify(requests));
+    <section>
+      <h2>📤 Lent Books</h2>
+      <ul id="lentBooksList"></ul>
+    </section>
+  </main>
 
-  alert("📬 Return request sent for: " + bookName);
+  <footer>
+    &copy; 2025 Bookish Soul's Library
+  </footer>
 
-  // (optional) visually mark that request was sent
-  button.disabled = true;
-  button.innerText = "⏳ Requested";
-}
-</script>
+  <script>
+    function loadProfile() {
+      // ⚠️ Later replace with Firebase Auth user
+      let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar";
+      document.getElementById("username").textContent = currentUser;
+
+      let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
+      let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || [];
+
+      const myBooksList = document.getElementById("myBooksList");
+      const lentBooksList = document.getElementById("lentBooksList");
+
+      myBooksList.innerHTML = myBooks.length === 0 
+        ? "<li>No books yet 📭</li>" 
+        : myBooks.map(book => `<li>${book}</li>`).join("");
+
+      lentBooksList.innerHTML = lentBooks.length === 0
+        ? "<li>No books lent 📭</li>"
+        : lentBooks.map(item => `<li>${item.book} → borrowed by <em>${item.borrower}</em></li>`).join("");
+    }
+
+    window.onload = loadProfile;
+  </script>
+</body>
+</html>

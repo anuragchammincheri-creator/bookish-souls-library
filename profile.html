@@ -5,96 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile - Bookish Soul's Library</title>
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f8f5f2;
-      color: #333;
-    }
-    header {
-      background: #4a6fa5;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    .navbar {
-      background: #4a6fa5;
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 0.8rem;
-      border-bottom: 3px solid #2e3a59;
-    }
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: bold;
-      transition: color 0.3s, background 0.3s;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-    }
-    .navbar a:hover {
-      background: white;
-      color: #4a6fa5;
-    }
-    main {
-      padding: 2rem;
-      max-width: 800px;
-      margin: auto;
-    }
-    h1 {
-      text-align: center;
-      color: #2e3a59;
-      margin-bottom: 2rem;
-    }
-    section {
-      margin-bottom: 2rem;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    ul li {
-      background: white;
-      padding: 0.8rem;
-      margin: 0.5rem 0;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    footer {
-      margin-top: 3rem;
-      background: #4a6fa5;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-    }
+    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f8f5f2; color: #333; }
+    header { background: #4a6fa5; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; }
+    .navbar { background: #4a6fa5; display: flex; justify-content: center; gap: 1.5rem; padding: 0.8rem; border-bottom: 3px solid #2e3a59; }
+    .navbar a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold; padding: 0.3rem 0.6rem; border-radius: 6px; transition: 0.3s; }
+    .navbar a:hover { background: white; color: #4a6fa5; }
+    main { padding: 2rem; max-width: 800px; margin: auto; }
+    h1 { text-align: center; color: #2e3a59; }
+    form { background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+    form input, form textarea { width: 100%; padding: 0.6rem; margin: 0.5rem 0; border: 1px solid #ccc; border-radius: 6px; }
+    form button { padding: 0.7rem 1.5rem; background: #4a6fa5; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 0.5rem; }
+    form button:hover { background: #2e3a59; }
+    .book-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
+    .book-card { background: white; border-radius: 10px; padding: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; }
+    .book-card img { width: 100px; height: 140px; object-fit: cover; border-radius: 6px; }
+    .book-card h3 { margin: 0.5rem 0 0.3rem; color: #2e3a59; }
+    .book-card p { font-size: 0.9rem; margin: 0.3rem 0; }
+    footer { margin-top: 3rem; background: #4a6fa5; color: white; text-align: center; padding: 1rem; }
   </style>
 </head>
 <body>
   <header>👤 My Profile</header>
+
   <nav class="navbar">
     <a href="index.html">🏠 Home</a>
     <a href="catalog.html">📚 Catalog</a>
-    <a href="requests.html">📬 Requests</a>
     <a href="profile.html">👤 Profile</a>
+    <a href="requests.html">📬 Requests</a>
   </nav>
 
   <main>
-    <h1>Welcome, <span id="username">Reader</span></h1>
+    <h1>Welcome to Your Library</h1>
 
-    <section>
-      <h2>📚 My Books</h2>
-      <ul id="myBooksList"></ul>
-    </section>
+    <!-- Book Add Form -->
+    <form id="bookForm">
+      <h2>Add a New Book</h2>
+      <input type="text" id="title" placeholder="Book Title" required>
+      <input type="text" id="author" placeholder="Author Name" required>
+      <textarea id="description" placeholder="Short Description"></textarea>
+      <input type="file" id="cover" accept="image/*">
+      <button type="submit">➕ Add Book</button>
+    </form>
 
-    <section>
-      <h2>📤 Lent Books</h2>
-      <ul id="lentBooksList"></ul>
-    </section>
+    <!-- My Books -->
+    <h2>📚 My Books</h2>
+    <div class="book-list" id="myBooksList"></div>
   </main>
 
   <footer>
@@ -102,27 +57,62 @@
   </footer>
 
   <script>
-    function loadProfile() {
-      // ⚠️ Later replace with Firebase Auth user
-      let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar";
-      document.getElementById("username").textContent = currentUser;
-
+    function loadBooks() {
       let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
-      let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || [];
+      const list = document.getElementById("myBooksList");
+      list.innerHTML = "";
 
-      const myBooksList = document.getElementById("myBooksList");
-      const lentBooksList = document.getElementById("lentBooksList");
+      if (myBooks.length === 0) {
+        list.innerHTML = "<p>No books added yet 📭</p>";
+        return;
+      }
 
-      myBooksList.innerHTML = myBooks.length === 0 
-        ? "<li>No books yet 📭</li>" 
-        : myBooks.map(book => `<li>${book}</li>`).join("");
-
-      lentBooksList.innerHTML = lentBooks.length === 0
-        ? "<li>No books lent 📭</li>"
-        : lentBooks.map(item => `<li>${item.book} → borrowed by <em>${item.borrower}</em></li>`).join("");
+      myBooks.forEach(book => {
+        let card = document.createElement("div");
+        card.classList.add("book-card");
+        card.innerHTML = `
+          <img src="${book.img || 'https://via.placeholder.com/100x140?text=Book'}" alt="${book.title}">
+          <h3>${book.title}</h3>
+          <p><em>${book.author}</em></p>
+          <p>${book.description || ""}</p>
+        `;
+        list.appendChild(card);
+      });
     }
 
-    window.onload = loadProfile;
+    // Convert uploaded file to Base64
+    function getBase64(file, callback) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => callback(reader.result);
+      reader.onerror = error => console.error(error);
+    }
+
+    document.getElementById("bookForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      let title = document.getElementById("title").value;
+      let author = document.getElementById("author").value;
+      let description = document.getElementById("description").value;
+      let cover = document.getElementById("cover").files[0];
+
+      let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
+
+      if (cover) {
+        getBase64(cover, function(base64Img) {
+          myBooks.push({ title, author, description, img: base64Img });
+          localStorage.setItem("myBooks", JSON.stringify(myBooks));
+          loadBooks();
+          document.getElementById("bookForm").reset();
+        });
+      } else {
+        myBooks.push({ title, author, description, img: "" });
+        localStorage.setItem("myBooks", JSON.stringify(myBooks));
+        loadBooks();
+        document.getElementById("bookForm").reset();
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", loadBooks);
   </script>
 </body>
 </html>

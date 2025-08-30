@@ -1,62 +1,84 @@
-<script>
-  function loadProfile() {
-    // 👉 Load or set default dummy books
-    let myBooks = JSON.parse(localStorage.getItem("myBooks")) || ["The Great Gatsby", "1984", "To Kill a Mockingbird"];
-    let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || ["The Alchemist → Sarah", "Atomic Habits → Mike"];
-    let borrowedBooks = ["Pride and Prejudice → owner - Emma", "The Hobbit → owner - Daniel"];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookish Soul's Library - Profile</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f8f5f2; }
+    header { background: #4a6fa5; color: white; padding: 1rem; font-size: 1.5rem; font-weight: bold; text-align: center; }
+    main { padding: 2rem; }
+    h2 { color: #2e3a59; margin-top: 2rem; }
+    ul { list-style: none; padding: 0; }
+    li { background: #fff; padding: 0.8rem; margin-bottom: 0.5rem; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    button { margin-left: 10px; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; }
+    .remove-btn { background: #d9534f; color: white; }
+    .return-btn { background: #f0ad4e; color: white; }
+  </style>
+</head>
+<body>
+  <header>👤 My Profile</header>
+  <main>
+    <h2>📚 My Books</h2>
+    <ul id="myBooks">
+      <li>Pride and Prejudice <button class="remove-btn" onclick="removeBook(this)">❌</button></li>
+      <li>To Kill a Mockingbird <button class="remove-btn" onclick="removeBook(this)">❌</button></li>
+    </ul>
 
-    localStorage.setItem("myBooks", JSON.stringify(myBooks));
-    localStorage.setItem("lentBooks", JSON.stringify(lentBooks));
+    <h2>📤 Books Lent</h2>
+    <ul id="lentBooks">
+      <li>1984 (Borrower: Ramesh) <button class="return-btn" onclick="requestReturn(this)">🔔 Request Return</button></li>
+      <li>The Great Gatsby (Borrower: Neha) <button class="return-btn" onclick="requestReturn(this)">🔔 Request Return</button></li>
+    </ul>
 
-    // Render lists
-    const myList = document.getElementById("myBooks");
-    const lentList = document.getElementById("lentBooks");
-    const borrowedList = document.getElementById("borrowedBooks");
+    <h2>📥 Books Borrowed</h2>
+    <ul id="borrowedBooks">
+      <li>Harry Potter (Owner: Anjali)</li>
+    </ul>
+  </main>
 
-    myList.innerHTML = "";
-    lentList.innerHTML = "";
-    borrowedList.innerHTML = "";
+  <script>
+    function removeBook(button) {
+      const li = button.parentElement;
+      li.remove();
+    }
 
-    myBooks.forEach(book => {
-      const li = document.createElement("li");
-      li.innerHTML = `${book} <button class="remove-btn" onclick="removeBook(this)">❌</button>`;
-      myList.appendChild(li);
+    function requestReturn(button) {
+      const li = button.parentElement;
+      const bookName = li.textContent.split("(")[0].trim();
+      const borrower = li.textContent.match(/\(Borrower: (.+)\)/)[1];
+
+      const request = { book: bookName, borrower: borrower };
+      let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
+      requests.push(request);
+      localStorage.setItem("returnRequests", JSON.stringify(requests));
+
+      alert("📬 Return request sent for: " + bookName + " → " + borrower);
+    }
+
+    function addReturnedBook(bookName) {
+      const lentList = document.getElementById("lentBooks");
+      const items = lentList.querySelectorAll("li");
+      items.forEach(li => {
+        if (li.textContent.includes(bookName)) {
+          li.remove();
+        }
+      });
+      const myBooks = document.getElementById("myBooks");
+      const newLi = document.createElement("li");
+      newLi.innerHTML = `${bookName} <button class="remove-btn" onclick="removeBook(this)">❌</button>`;
+      myBooks.appendChild(newLi);
+    }
+
+    window.addEventListener("storage", (event) => {
+      if (event.key === "returnedBook") {
+        const returnedBook = event.newValue;
+        if (returnedBook) {
+          addReturnedBook(returnedBook);
+          localStorage.removeItem("returnedBook");
+        }
+      }
     });
-
-    lentBooks.forEach(book => {
-      const li = document.createElement("li");
-      li.innerHTML = `${book} <button class="request-btn" onclick="requestReturn(this)">🔔 Request Return</button>`;
-      lentList.appendChild(li);
-    });
-
-    borrowedBooks.forEach(book => {
-      const li = document.createElement("li");
-      li.innerText = book;
-      borrowedList.appendChild(li);
-    });
-  }
-
-  function removeBook(button) {
-    const li = button.parentElement;
-    const bookName = li.innerText.replace("❌", "").trim();
-
-    let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
-    myBooks = myBooks.filter(b => b !== bookName);
-    localStorage.setItem("myBooks", JSON.stringify(myBooks));
-
-    li.remove();
-  }
-
-  function requestReturn(button) {
-    const li = button.parentElement;
-    const bookInfo = li.innerText.replace("🔔 Request Return", "").trim();
-
-    let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
-    requests.push(bookInfo);
-    localStorage.setItem("returnRequests", JSON.stringify(requests));
-
-    alert("📬 Return request sent for: " + bookInfo);
-  }
-
-  window.onload = loadProfile;
-</script>
+  </script>
+</body>
+</html>

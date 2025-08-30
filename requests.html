@@ -1,58 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bookish Soul's Library - Requests</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f8f5f2; }
-    header { background: #4a6fa5; color: white; padding: 1rem; font-size: 1.5rem; font-weight: bold; text-align: center; }
-    main { padding: 2rem; }
-    ul { list-style: none; padding: 0; }
-    li { background: #fff; padding: 0.8rem; margin-bottom: 0.5rem; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .complete-btn { background: #5cb85c; color: white; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; }
-  </style>
-</head>
-<body>
-  <header>📬 Return Requests</header>
-  <main>
-    <ul id="requestList"></ul>
-  </main>
+<!DOCTYPE html>  <html lang="en">    <head>    
+  <meta charset="UTF-8">    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+  <title>Requests - Bookish Soul's Library</title>    
+  <style>    
+    body {    
+      font-family: 'Poppins', sans-serif;    
+      margin: 0;    
+      padding: 0;    
+      background: #f8f5f2;    
+      color: #333;    
+    }  header {    
+  background: #4a6fa5;    
+  color: white;    
+  padding: 1rem;    
+  text-align: center;    
+  font-size: 1.5rem;    
+  font-weight: bold;    
+}    .navbar {
+background: #4a6fa5;
+display: flex;
+justify-content: center;
+gap: 1.5rem;
+padding: 0.8rem;
+border-bottom: 3px solid #2e3a59;
+}
 
-  <script>
-    function loadRequests() {
-      let requests = JSON.parse(localStorage.getItem("returnRequests"));
-      if (!requests || requests.length === 0) {
-        // ✅ preload dummy requests if empty
-        requests = [
-          { book: "1984", borrower: "Ramesh" },
-          { book: "The Great Gatsby", borrower: "Neha" }
-        ];
-        localStorage.setItem("returnRequests", JSON.stringify(requests));
-      }
+.navbar a {
+color: white;
+text-decoration: none;
+font-size: 1.1rem;
+font-weight: bold;
+transition: color 0.3s, background 0.3s;
+padding: 0.3rem 0.6rem;
+border-radius: 6px;
+}
 
-      const list = document.getElementById("requestList");
-      list.innerHTML = "";
+.navbar a:hover {
+background: white;
+color: #4a6fa5;
+}
 
-      requests.forEach((req, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          ${req.book} → Borrower: <em>${req.borrower}</em>
-          <button class="complete-btn" onclick="markComplete(${index}, '${req.book}')">✅ Mark as Returned</button>
-        `;
-        list.appendChild(li);
-      });
-    }
+main {
+padding: 2rem;
+max-width: 800px;
+margin: auto;
+}
 
-    function markComplete(index, bookName) {
-      let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
-      requests.splice(index, 1);
-      localStorage.setItem("returnRequests", JSON.stringify(requests));
-      localStorage.setItem("returnedBook", bookName);
-      loadRequests();
-    }
+h1 {
+text-align: center;
+color: #2e3a59;
+margin-bottom: 2rem;
+}
 
-    window.onload = loadRequests;
-  </script>
-</body>
+ul {
+list-style: none;
+padding: 0;
+}
+
+ul li {
+background: white;
+padding: 1rem;
+margin: 0.8rem 0;
+border-radius: 10px;
+box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.complete-btn {
+background: #27ae60;
+color: white;
+border: none;
+padding: 0.4rem 0.8rem;
+border-radius: 6px;
+cursor: pointer;
+font-size: 0.9rem;
+}
+
+.complete-btn:hover {
+background: #1e8449;
+}
+
+footer {
+margin-top: 3rem;
+background: #4a6fa5;
+color: white;
+text-align: center;
+padding: 1rem;
+}
+
+  </style>    
+</head>    
+<body>    
+  <header>📬 Book Return Requests</header>    <nav class="navbar">    
+    <a href="index.html">🏠 Home</a>    
+    <a href="catalog.html">📚 Catalog</a>    
+    <a href="requests.html">📬 Requests</a>    
+    <a href="profile.html">👤 Profile</a>    
+  </nav>    <main>    
+    <h1>Pending Return Requests</h1>    
+    <ul id="requestList"></ul>    
+  </main>    <footer>    
+    &copy; 2025 Bookish Soul's Library    
+  </footer>    <script>    
+    function loadRequests() {    
+      let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];    
+      const list = document.getElementById("requestList");    
+      list.innerHTML = "";    if (requests.length === 0) {    
+    list.innerHTML = "<p>No return requests yet 📭</p>";    
+    return;    
+  }    
+
+  requests.forEach((req, index) => {    
+    const li = document.createElement("li");    
+    li.innerHTML = `    
+      ${req}    
+      <button class="complete-btn" onclick="markComplete(${index})">✅ Mark as Returned</button>    
+    `;    
+    list.appendChild(li);    
+  });    
+}    
+
+function markComplete(index) {    
+  let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];    
+  requests.splice(index, 1); // remove this request    
+  localStorage.setItem("returnRequests", JSON.stringify(requests));    
+  loadRequests(); // reload list    
+}    
+
+// load when page opens    
+window.onload = loadRequests;
+
+</script>  </body>
+
 </html>

@@ -1,273 +1,34 @@
-<!DOCTYPE html>  <html lang="en">    <head>    
-  <meta charset="UTF-8" />    
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
-  <title>My Profile - Bookish Soul's Library</title>    
-  <style>    
-    body {    
-      font-family: 'Poppins', sans-serif;    
-      margin: 0;    
-      padding: 0;    
-      background: #f8f5f2;    
-      color: #333;    
-    }  header {    
-  background: #4a6fa5;    
-  color: white;    
-  padding: 1rem;    
-  text-align: center;    
-  font-size: 1.5rem;    
-  font-weight: bold;    
-}    .navbar {
-background: #4a6fa5;
-display: flex;
-justify-content: center;
-gap: 1.5rem;
-padding: 0.8rem;
-border-bottom: 3px solid #2e3a59;
+<script>
+function openModal() {
+  document.getElementById("editModal").style.display = "flex";
+}
+function closeModal() {
+  document.getElementById("editModal").style.display = "none";
 }
 
-.navbar a {
-color: white;
-text-decoration: none;
-font-size: 1.1rem;
-font-weight: bold;
-transition: color 0.3s, background 0.3s;
-padding: 0.3rem 0.6rem;
-border-radius: 6px;
+function removeBook(button) {
+  const li = button.parentElement;
+  li.remove();
 }
 
-.navbar a:hover {
-background: white;
-color: #4a6fa5;
+function requestReturn(button) {
+  const li = button.parentElement;
+  const bookName = li.childNodes[0].nodeValue.trim();
+  const borrower = li.querySelector("em").innerText;
+
+  // Build a structured request
+  let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
+  requests.push({
+    book: bookName,
+    borrower: borrower,
+    owner: "John Doe" // ⚠️ later replace with Firebase currentUser
+  });
+  localStorage.setItem("returnRequests", JSON.stringify(requests));
+
+  alert("📬 Return request sent for: " + bookName);
+
+  // (optional) visually mark that request was sent
+  button.disabled = true;
+  button.innerText = "⏳ Requested";
 }
-
-main {
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 2rem;
-}
-
-.profile-card {
-background: white;
-padding: 2rem;
-border-radius: 12px;
-box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-max-width: 700px;
-width: 100%;
-text-align: center;
-position: relative;
-}
-
-.profile-card img {
-width: 120px;
-height: 120px;
-border-radius: 50%;
-margin-bottom: 1rem;
-object-fit: cover;
-}
-
-.edit-btn {
-position: absolute;
-top: 15px;
-right: 15px;
-background: #4a6fa5;
-color: white;
-border: none;
-padding: 0.4rem 0.8rem;
-border-radius: 6px;
-cursor: pointer;
-font-size: 0.9rem;
-}
-
-.edit-btn:hover {
-background: #395682;
-}
-
-h3 {
-margin-top: 1.5rem;
-color: #2e3a59;
-border-bottom: 2px solid #ddd;
-padding-bottom: 0.3rem;
-}
-
-ul {
-list-style: none;
-padding: 0;
-}
-
-ul li {
-background: #f1f1f1;
-margin: 0.5rem 0;
-padding: 0.6rem;
-border-radius: 8px;
-text-align: left;
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
-
-.remove-btn {
-background: #e74c3c;
-color: white;
-border: none;
-padding: 0.3rem 0.6rem;
-border-radius: 6px;
-cursor: pointer;
-font-size: 0.8rem;
-}
-
-.remove-btn:hover {
-background: #c0392b;
-}
-
-.request-btn {
-background: #f39c12;
-color: white;
-border: none;
-padding: 0.3rem 0.6rem;
-border-radius: 6px;
-cursor: pointer;
-font-size: 0.8rem;
-}
-
-.request-btn:hover {
-background: #d35400;
-}
-
-/* 🔹 Modal */
-.modal {
-display: none;
-position: fixed;
-top: 0; left: 0;
-width: 100%; height: 100%;
-background: rgba(0,0,0,0.6);
-justify-content: center;
-align-items: center;
-}
-
-.modal-content {
-background: white;
-padding: 2rem;
-border-radius: 12px;
-max-width: 500px;
-width: 100%;
-}
-
-.modal-content h2 {
-margin-top: 0;
-color: #2e3a59;
-}
-
-.modal-content label {
-display: block;
-margin-top: 1rem;
-font-weight: bold;
-text-align: left;
-}
-
-.modal-content input,
-.modal-content textarea {
-width: 100%;
-padding: 0.6rem;
-margin-top: 0.3rem;
-border: 1px solid #ccc;
-border-radius: 8px;
-}
-
-.modal-content button {
-margin-top: 1rem;
-padding: 0.6rem 1.2rem;
-border: none;
-border-radius: 8px;
-cursor: pointer;
-}
-
-.save-btn {
-background: #4a6fa5;
-color: white;
-}
-
-.cancel-btn {
-background: #ccc;
-margin-left: 0.5rem;
-}
-
-footer {
-margin-top: 3rem;
-background: #4a6fa5;
-color: white;
-text-align: center;
-padding: 1rem;
-}
-
-  </style>    
-</head>    
-<body>    
-  <header>👤 My Profile</header>    <nav class="navbar">    
-    <a href="index.html">🏠 Home</a>    
-    <a href="catalog.html">📚 Catalog</a>    
-    <a href="requests.html">📬 Requests</a>    
-    <a href="profile.html">👤 Profile</a>    
-  </nav>    <main>    
-    <div class="profile-card">    
-      <button class="edit-btn" onclick="openModal()">✏️ Edit Profile</button>    
-      <img src="https://via.placeholder.com/120" alt="Profile Picture">    
-      <h2>John Doe</h2>    
-      <p><strong>Email:</strong> john@example.com</p>    
-      <p><strong>Date of Birth:</strong> 01 Jan 2000</p>  <h3>📚 My Books</h3>    
-  <ul id="myBooks">    
-    <li>The Great Gatsby <button class="remove-btn" onclick="removeBook(this)">❌</button></li>    
-    <li>1984 <button class="remove-btn" onclick="removeBook(this)">❌</button></li>    
-    <li>To Kill a Mockingbird <button class="remove-btn" onclick="removeBook(this)">❌</button></li>    
-  </ul>      <h3>📤 Books Lent</h3>    
-  <ul id="lentBooks">    
-    <li>The Alchemist → <em>Sarah</em> <button class="request-btn" onclick="requestReturn(this)">🔔 Request Return</button></li>    
-    <li>Atomic Habits → <em>Mike</em> <button class="request-btn" onclick="requestReturn(this)">🔔 Request Return</button></li>    
-  </ul>      <h3>📥 Books Borrowed</h3>    
-  <ul id="borrowedBooks">    
-    <li>Pride and Prejudice → owner - Emma</li>    
-    <li>The Hobbit → owner - Daniel</li>    
-  </ul>    
-</div>    </main>    <!-- 🔹 Edit Profile Modal -->    <div class="modal" id="editModal">    
-    <div class="modal-content">    
-      <h2>Edit Profile</h2>    
-      <label>Profile Photo:</label>    
-      <input type="file" />  <label>Username:</label>    
-  <input type="text" placeholder="Enter new name" />    <label>Email:</label>
-<input type="email" placeholder="Enter new email" />
-
-<label>Date of Birth:</label>
-<input type="date" />
-
-<label>My Books (comma separated):</label>
-
-  <textarea placeholder="Enter your books"></textarea>    <button class="save-btn" onclick="closeModal()">Save Changes</button>
-<button class="cancel-btn" onclick="closeModal()">Cancel</button>
-
-</div>    </div>    <footer>    
-    &copy; 2025 Bookish Soul's Library    
-  </footer>    <script>    
-    function openModal() {    
-      document.getElementById("editModal").style.display = "flex";    
-    }    
-    function closeModal() {    
-      document.getElementById("editModal").style.display = "none";    
-    }    function removeBook(button) {    
-  const li = button.parentElement;    
-  li.remove();    
-}    
-
-function requestReturn(button) {    
-  const li = button.parentElement;    
-  const bookInfo = li.innerText.replace("🔔 Request Return", "").trim();    
-  alert("📬 Return request sent for: " + bookInfo);    
-
-  // save to localStorage → Requests page    
-  let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];    
-  requests.push(bookInfo);    
-  localStorage.setItem("returnRequests", JSON.stringify(requests));    
-}
-
-</script>  </body>
-
-</html>
+</script>

@@ -11,7 +11,8 @@
     .navbar a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold; transition: 0.3s; padding: 0.3rem 0.6rem; border-radius: 6px; }
     .navbar a:hover { background: white; color: #4a6fa5; }
     main { padding: 2rem; max-width: 900px; margin: auto; }
-    h1 { text-align: center; color: #2e3a59; margin-bottom: 2rem; }
+    h1 { text-align: center; color: #2e3a59; margin-bottom: 1rem; }
+    h2 { margin-top: 2rem; color: #2e3a59; }
     .request-card { background: white; padding: 1rem; margin: 1rem 0; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
     .request-card img { width: 80px; height: 120px; object-fit: cover; border-radius: 6px; margin-right: 1rem; }
     .request-header { display: flex; align-items: center; }
@@ -37,8 +38,13 @@
   </nav>
 
   <main>
-    <h1>Pending Requests</h1>
-    <div id="requestList"></div>
+    <h1>Requests Dashboard</h1>
+
+    <h2>📤 Requests You Made</h2>
+    <div id="outgoingRequests"></div>
+
+    <h2>📥 Requests To You</h2>
+    <div id="incomingRequests"></div>
   </main>
 
   <footer>
@@ -48,11 +54,16 @@
   <script>
     function loadRequests() {
       let requests = JSON.parse(localStorage.getItem("requests")) || [];
-      const container = document.getElementById("requestList");
-      container.innerHTML = "";
+      let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar";
+
+      const outgoingDiv = document.getElementById("outgoingRequests");
+      const incomingDiv = document.getElementById("incomingRequests");
+      outgoingDiv.innerHTML = "";
+      incomingDiv.innerHTML = "";
 
       if (requests.length === 0) {
-        container.innerHTML = "<p>No requests yet 📭</p>";
+        outgoingDiv.innerHTML = "<p>No requests yet 📭</p>";
+        incomingDiv.innerHTML = "<p>No requests yet 📭</p>";
         return;
       }
 
@@ -65,21 +76,26 @@
             <div class="request-info">
               <h3>${req.book}</h3>
               <p><strong>Owner:</strong> ${req.owner}</p>
-              <p><strong>Requested by:</strong> ${req.borrower}</p>
+              <p><strong>Requester:</strong> ${req.requester}</p>
               <p><strong>Status:</strong> ${req.status}</p>
             </div>
           </div>
           <div class="request-actions">
-            ${req.status === "pending" ? `
+            ${req.owner === currentUser && req.status === "pending" ? `
               <button class="approve" onclick="approveRequest(${index})">✅ Approve</button>
               <button class="reject" onclick="rejectRequest(${index})">❌ Reject</button>
             ` : ""}
-            ${req.status === "borrowed" ? `
+            ${req.owner === currentUser && req.status === "borrowed" ? `
               <button class="return" onclick="markReturned(${index})">📦 Mark as Returned</button>
             ` : ""}
           </div>
         `;
-        container.appendChild(card);
+
+        if (req.requester === currentUser) {
+          outgoingDiv.appendChild(card);
+        } else if (req.owner === currentUser) {
+          incomingDiv.appendChild(card);
+        }
       });
     }
 
@@ -88,10 +104,13 @@
       requests[index].status = "borrowed";
       localStorage.setItem("requests", JSON.stringify(requests));
 
-      // Update lentBooks
-      let lent = JSON.parse(localStorage.getItem("lentBooks")) || [];
-      lent.push({ book: requests[index].book, borrower: requests[index].borrower });
-      localStorage.setItem("lentBooks", JSON.stringify(lent));
+      // Add to lentBooks
+      let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || [];
+      lentBooks.push({
+        book: { title: requests[index].book, img: requests[index].img },
+        borrower: requests[index].requester
+      });
+      localStorage.setItem("lentBooks", JSON.stringify(lentBooks));
 
       loadRequests();
     }
@@ -110,13 +129,13 @@
       localStorage.setItem("requests", JSON.stringify(requests));
 
       // Remove from lentBooks
-      let lent = JSON.parse(localStorage.getItem("lentBooks")) || [];
-      lent = lent.filter(b => b.book !== returned.book);
-      localStorage.setItem("lentBooks", JSON.stringify(lent));
+      let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || [];
+      lentBooks = lentBooks.filter(b => b.book.title !== returned.book);
+      localStorage.setItem("lentBooks", JSON.stringify(lentBooks));
 
-      // Move back to My Books
+      // Restore to myBooks
       let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
-      myBooks.push(returned.book);
+      myBooks.push({ title: returned.book, img: returned.img });
       localStorage.setItem("myBooks", JSON.stringify(myBooks));
 
       loadRequests();

@@ -195,7 +195,7 @@
       document.getElementById("notifDropdown").classList.toggle("active");
     }
 
-    // Load notifications from localStorage
+    // Load notifications from localStorage (temporary, will move to Firestore later)
     function loadNotifications() {
       const notifList = document.getElementById("notifList");
       notifList.innerHTML = "";
@@ -204,7 +204,6 @@
       let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar"; 
       // ⚠️ later this will come from Firebase Auth
 
-      // Show only requests where this user is the borrower
       let myNotifications = requests.filter(req => req.borrower === currentUser);
 
       if (myNotifications.length === 0) {
@@ -224,12 +223,35 @@
         });
       }
 
-      // Update badge
       document.getElementById("notifBadge").textContent = myNotifications.length;
     }
 
-    // Initial load
     loadNotifications();
+  </script>
+
+  <!-- ✅ Firebase Setup -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+    import { getStorage } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBvplQCpz-pIeT8ptEDF8Gj2acD9gcE_JA",
+      authDomain: "bookish-soul-s-library.firebaseapp.com",
+      projectId: "bookish-soul-s-library",
+      storageBucket: "bookish-soul-s-library.firebasestorage.app",
+      messagingSenderId: "718849773540",
+      appId: "1:718849773540:web:e9b42aad3427e081a5c1f1"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    console.log("🔥 Firebase Connected!");
   </script>
 </body>
 </html>

@@ -78,4 +78,272 @@
     <!-- Add Book -->
     <form id="bookForm">
       <h2>Add a New Book</h2>
-      <input type
+      <input type="text" id="title" placeholder="Book Title" required/>
+      <input type="text" id="author" placeholder="Author Name" required/>
+      <textarea id="description" placeholder="Short Description"></textarea>
+      <input type="file" id="cover" accept="image/*"/>
+      <button type="submit">➕ Add Book</button>
+      <small style="display:block;color:#666;margin-top:.3rem;">(Duplicate titles by the same author in your library are blocked.)</small>
+    </form>
+
+    <!-- My Books -->
+    <section>
+      <h2>📚 My Books</h2>
+      <div class="grid" id="myBooksList"></div>
+    </section>
+
+    <!-- Lent Books -->
+    <section>
+      <h2>📤 Lent Books</h2>
+      <div class="grid" id="lentBooksList"></div>
+    </section>
+
+    <!-- Borrowed Books -->
+    <section>
+      <h2>📥 Borrowed Books</h2>
+      <div class="grid" id="borrowedBooksList"></div>
+    </section>
+
+    <!-- My Pending Requests -->
+    <section>
+      <h2>📬 My Requests (Pending)</h2>
+      <div id="myRequestsList"></div>
+    </section>
+  </main>
+
+  <footer>&copy; 2025 Bookish Soul's Library</footer>
+
+  <script>
+    // ---------- helpers ----------
+    const getUser = () => localStorage.getItem("currentUser") || "Ravi Kumar";
+    const currentUser = getUser();
+
+    const lsGet = (k, fallback) => {
+      try { return JSON.parse(localStorage.getItem(k)) ?? fallback; }
+      catch { return fallback; }
+    };
+    const lsSet = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+    // Profile storage key
+    const PROFILE_KEY = `profile:${currentUser}`;
+
+    // Base64 read
+    const toBase64 = (file) => new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result);
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+
+    // ---------- profile photo ----------
+    function loadProfile() {
+      const profile = lsGet(PROFILE_KEY, { name: currentUser, email: `${currentUser.replace(/\s+/g,'.').toLowerCase()}@example.com`, photo: "" });
+      document.getElementById("profileName").textContent = profile.name || currentUser;
+      document.getElementById("profileEmail").textContent = profile.email || "";
+      document.getElementById("avatar").src = profile.photo || "https://via.placeholder.com/90?text=You";
+    }
+
+    async function changePhoto(file) {
+      if (!file) return;
+      const base64 = await toBase64(file);
+      const profile = lsGet(PROFILE_KEY, {});
+      profile.photo = base64;
+      lsSet(PROFILE_KEY, profile);
+      loadProfile();
+    }
+
+    function removePhoto() {
+      const profile = lsGet(PROFILE_KEY, {});
+      profile.photo = "";
+      lsSet(PROFILE_KEY, profile);
+      loadProfile();
+    }
+
+    // ---------- books: add / render / remove ----------
+    function addBook(book) {
+      let myBooks = lsGet("myBooks", []);
+      // dedupe by title + author for THIS owner
+      const key = (s) => s.trim().toLowerCase();
+      const exists = myBooks.some(b => key(b.title) === key(book.title) && key(b.author) === key(book.author));
+      if (exists) {
+        alert("⚠️ You already have this title by the same author.");
+        return false;
+      }
+      myBooks.push(book);
+      lsSet("myBooks", myBooks);
+      return true;
+    }
+
+    function removeMyBook(title, author) {
+      let myBooks = lsGet("myBooks", []);
+      const before = myBooks.length;
+      myBooks = myBooks.filter(b => !(b.title === title && b.author === author));
+      lsSet("myBooks", myBooks);
+      if (myBooks.length !== before) {
+        alert(`🗑️ Removed "${title}" from your library.`);
+      }
+      renderAll();
+    }
+
+    // ---------- borrowed / lent / requests ----------
+    function requestReturn(index) {
+      const lent = lsGet("lentBooks", []);
+      const book = lent[index];
+      if (!book) return;
+      let rr = lsGet("returnRequests", []);
+      rr.push(book);
+      lsSet("returnRequests", rr);
+      alert(`📬 Return request created for "${book.title}"`);
+      renderAll();
+    }
+
+    function cancelMyRequest(bookTitle) {
+      let reqs = lsGet("requests", []);
+      const before = reqs.length;
+      reqs = reqs.filter(r => !(r.book === bookTitle && r.status === "pending" && r.borrower === currentUser));
+      lsSet("requests", reqs);
+      if (reqs.length !== before) alert(`❎ Canceled request for "${bookTitle}"`);
+      renderAll();
+    }
+
+    // ---------- renderers ----------
+    function renderMyBooks() {
+      const list = document.getElementById("myBooksList");
+      const myBooks = lsGet("myBooks", []);
+      list.innerHTML = "";
+      if (!myBooks.length) {
+        list.innerHTML = `<div class="card empty">No books added yet 📭</div>`;
+        return;
+      }
+      myBooks.forEach(b => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `
+          <img src="${b.img || 'https://via.placeholder.com/110x150?text=Book'}" alt="${b.title}">
+          <h3>${b.title}</h3>
+          <p><em>${b.author}</em></p>
+          <p>${b.description ? b.description : ""}</p>
+          <div class="row">
+            <button class="pill danger" onclick="removeMyBook(${JSON.stringify(b.title)}, ${JSON.stringify(b.author)})">Remove</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function renderLentBooks() {
+      const list = document.getElementById("lentBooksList");
+      const lent = lsGet("lentBooks", []);
+      list.innerHTML = "";
+      if (!lent.length) {
+        list.innerHTML = `<div class="card empty">No books lent yet 📭</div>`;
+        return;
+      }
+      lent.forEach((b, i) => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `
+          <img src="${b.img || 'https://via.placeholder.com/110x150?text=Book'}" alt="${b.title}">
+          <h3>${b.title}</h3>
+          <p><em>${b.author || ""}</em></p>
+          <p>Lent to: <strong>${b.borrower || "Unknown"}</strong></p>
+          <div class="row">
+            <button class="pill warn" onclick="requestReturn(${i})">📬 Request Return</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function renderBorrowedBooks() {
+      const list = document.getElementById("borrowedBooksList");
+      const reqs = lsGet("requests", []);
+      const borrowed = reqs.filter(r => r.status === "borrowed" && r.borrower === currentUser);
+      list.innerHTML = "";
+      if (!borrowed.length) {
+        list.innerHTML = `<div class="card empty">You are not currently reading any books 📭</div>`;
+        return;
+      }
+      borrowed.forEach(r => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `
+          <img src="${r.img || 'https://via.placeholder.com/110x150?text=Book'}" alt="${r.book}">
+          <h3>${r.book}</h3>
+          <p>Owner: <strong>${r.owner}</strong></p>
+          <p>Status: 📖 Borrowed</p>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function renderMyPendingRequests() {
+      const container = document.getElementById("myRequestsList");
+      const reqs = lsGet("requests", []);
+      const mine = reqs.filter(r => r.status === "pending" && r.borrower === currentUser);
+      container.innerHTML = "";
+      if (!mine.length) {
+        container.innerHTML = `<div class="card empty">No pending requests 📭</div>`;
+        return;
+      }
+      mine.forEach(r => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${r.img || 'https://via.placeholder.com/110x150?text=Book'}" alt="${r.book}">
+          <h3>${r.book}</h3>
+          <p>Owner: <strong>${r.owner}</strong></p>
+          <p>Status: ⏳ Pending</p>
+          <div class="row">
+            <button class="pill gray" onclick="cancelMyRequest(${JSON.stringify(r.book)})">Cancel Request</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderAll() {
+      loadProfile();
+      renderMyBooks();
+      renderLentBooks();
+      renderBorrowedBooks();
+      renderMyPendingRequests();
+    }
+
+    // ---------- events ----------
+    document.addEventListener("DOMContentLoaded", () => {
+      // Profile photo change/remove
+      document.getElementById("photoInput").addEventListener("change", (e) => changePhoto(e.target.files[0]));
+      document.getElementById("removePhotoBtn").addEventListener("click", removePhoto);
+
+      // Add book form
+      document.getElementById("bookForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const title = document.getElementById("title").value.trim();
+        const author = document.getElementById("author").value.trim();
+        const description = document.getElementById("description").value.trim();
+        const file = document.getElementById("cover").files[0];
+
+        const book = { title, author, description, img: "" };
+
+        if (file) {
+          try {
+            book.img = await toBase64(file);
+          } catch (err) {
+            console.error(err);
+            alert("Image load failed. Adding without cover.");
+          }
+        }
+
+        if (addBook(book)) {
+          // clear form
+          document.getElementById("bookForm").reset();
+          renderAll();
+        }
+      });
+
+      renderAll();
+    });
+  </script>
+</body>
+</html>

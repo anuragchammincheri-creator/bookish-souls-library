@@ -43,6 +43,13 @@
   </footer>
 
   <script>
+    // dummy books on first run
+    const dummyBooks = [
+      { title: "The Alchemist", author: "Paulo Coelho", description: "A journey of dreams and destiny.", img: "https://covers.openlibrary.org/b/id/8101356-L.jpg", owner: "Anita", status: "available" },
+      { title: "1984", author: "George Orwell", description: "Dystopian society under surveillance.", img: "https://covers.openlibrary.org/b/id/7222246-L.jpg", owner: "Rahul", status: "available" },
+      { title: "Harry Potter", author: "J.K. Rowling", description: "The boy who lived.", img: "https://covers.openlibrary.org/b/id/7984916-L.jpg", owner: "Sneha", status: "available" }
+    ];
+
     function loadCatalog() {
       let catalogDiv = document.getElementById("catalog");
       catalogDiv.innerHTML = "";
@@ -50,27 +57,30 @@
       let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
       let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || [];
       let requests = JSON.parse(localStorage.getItem("requests")) || [];
-      let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar";
+      let allBooks = JSON.parse(localStorage.getItem("allBooks")) || [];
 
-      // Merge owned + lent books
-      let allBooks = [];
+      // if no allBooks, initialize with dummy ones
+      if (allBooks.length === 0) {
+        allBooks = dummyBooks;
+        localStorage.setItem("allBooks", JSON.stringify(allBooks));
+      }
 
+      // add myBooks (if not already in allBooks)
       myBooks.forEach(book => {
-        allBooks.push({
-          ...book,
-          owner: currentUser,
-          status: "available"
-        });
+        if (!allBooks.find(b => b.title === book.title)) {
+          allBooks.push({ ...book, owner: "You", status: "available" });
+        }
       });
 
+      // merge lentBooks
       lentBooks.forEach(item => {
-        allBooks.push({
-          ...item.book,
-          owner: currentUser,
-          status: "lent",
-          borrower: item.borrower
-        });
+        if (!allBooks.find(b => b.title === item.book.title)) {
+          allBooks.push({ ...item.book, owner: "You", status: "lent", borrower: item.borrower });
+        }
       });
+
+      // save merged
+      localStorage.setItem("allBooks", JSON.stringify(allBooks));
 
       if (allBooks.length === 0) {
         catalogDiv.innerHTML = "<p>No books in catalog yet 📭</p>";
@@ -85,11 +95,11 @@
         let buttonHTML = `<button onclick="requestBook('${book.title}', '${book.owner}')">Request Book</button>`;
 
         if (book.status === "lent") {
-          statusText = `❌ Borrowed by ${book.borrower}`;
+          statusText = `❌ Borrowed by ${book.borrower || "Someone"}`;
           buttonHTML = `<button disabled>Not Available</button>`;
         }
 
-        // check if pending request exists
+        // pending request?
         let pendingReq = requests.find(r => r.book === book.title && r.status === "pending");
         if (pendingReq) {
           buttonHTML = `<button disabled>Request Pending</button>`;

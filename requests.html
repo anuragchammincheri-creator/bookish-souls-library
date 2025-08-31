@@ -5,146 +5,125 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Requests - Bookish Soul's Library</title>
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f8f5f2;
-      color: #333;
-    }
-    header {
-      background: #4a6fa5;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    .navbar {
-      background: #4a6fa5;
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 0.8rem;
-      border-bottom: 3px solid #2e3a59;
-    }
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: bold;
-      transition: color 0.3s, background 0.3s;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-    }
-    .navbar a:hover {
-      background: white;
-      color: #4a6fa5;
-    }
-    main {
-      padding: 2rem;
-      max-width: 800px;
-      margin: auto;
-    }
-    h1 {
-      text-align: center;
-      color: #2e3a59;
-      margin-bottom: 2rem;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    ul li {
-      background: white;
-      padding: 1rem;
-      margin: 0.8rem 0;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .complete-btn {
-      background: #27ae60;
-      color: white;
-      border: none;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .complete-btn:hover {
-      background: #1e8449;
-    }
-    footer {
-      margin-top: 3rem;
-      background: #4a6fa5;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-    }
+    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f8f5f2; color: #333; }
+    header { background: #4a6fa5; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; }
+    .navbar { background: #4a6fa5; display: flex; justify-content: center; gap: 1.5rem; padding: 0.8rem; border-bottom: 3px solid #2e3a59; }
+    .navbar a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold; transition: 0.3s; padding: 0.3rem 0.6rem; border-radius: 6px; }
+    .navbar a:hover { background: white; color: #4a6fa5; }
+    main { padding: 2rem; max-width: 900px; margin: auto; }
+    h1 { text-align: center; color: #2e3a59; margin-bottom: 2rem; }
+    .request-card { background: white; padding: 1rem; margin: 1rem 0; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .request-card img { width: 80px; height: 120px; object-fit: cover; border-radius: 6px; margin-right: 1rem; }
+    .request-header { display: flex; align-items: center; }
+    .request-info { flex: 1; }
+    .request-actions { margin-top: 0.5rem; }
+    button { margin: 0.2rem; padding: 0.4rem 0.8rem; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+    .approve { background: #27ae60; color: white; }
+    .approve:hover { background: #1e8449; }
+    .reject { background: #e74c3c; color: white; }
+    .reject:hover { background: #c0392b; }
+    .return { background: #2980b9; color: white; }
+    .return:hover { background: #1f618d; }
+    footer { margin-top: 3rem; background: #4a6fa5; color: white; text-align: center; padding: 1rem; }
   </style>
 </head>
 <body>
-  <header>📬 Book Return Requests</header>
+  <header>📬 Book Requests</header>
   <nav class="navbar">
     <a href="index.html">🏠 Home</a>
     <a href="catalog.html">📚 Catalog</a>
     <a href="requests.html">📬 Requests</a>
     <a href="profile.html">👤 Profile</a>
   </nav>
+
   <main>
-    <h1>Pending Return Requests</h1>
-    <ul id="requestList"></ul>
+    <h1>Pending Requests</h1>
+    <div id="requestList"></div>
   </main>
+
   <footer>
     &copy; 2025 Bookish Soul's Library
   </footer>
 
   <script>
     function loadRequests() {
-      let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
-      const list = document.getElementById("requestList");
-      list.innerHTML = "";
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      const container = document.getElementById("requestList");
+      container.innerHTML = "";
 
       if (requests.length === 0) {
-        list.innerHTML = "<p>No return requests yet 📭</p>";
+        container.innerHTML = "<p>No requests yet 📭</p>";
         return;
       }
 
       requests.forEach((req, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <span><strong>${req.book}</strong> borrowed by <em>${req.borrower}</em></span>
-          <button class="complete-btn" onclick="markComplete(${index})">✅ Mark as Returned</button>
+        let card = document.createElement("div");
+        card.className = "request-card";
+        card.innerHTML = `
+          <div class="request-header">
+            <img src="${req.img || 'https://via.placeholder.com/80x120'}" alt="${req.book}">
+            <div class="request-info">
+              <h3>${req.book}</h3>
+              <p><strong>Owner:</strong> ${req.owner}</p>
+              <p><strong>Requested by:</strong> ${req.borrower}</p>
+              <p><strong>Status:</strong> ${req.status}</p>
+            </div>
+          </div>
+          <div class="request-actions">
+            ${req.status === "pending" ? `
+              <button class="approve" onclick="approveRequest(${index})">✅ Approve</button>
+              <button class="reject" onclick="rejectRequest(${index})">❌ Reject</button>
+            ` : ""}
+            ${req.status === "borrowed" ? `
+              <button class="return" onclick="markReturned(${index})">📦 Mark as Returned</button>
+            ` : ""}
+          </div>
         `;
-        list.appendChild(li);
+        container.appendChild(card);
       });
     }
 
-    function markComplete(index) {
-      let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
-      const completed = requests[index]; // book returned
+    function approveRequest(index) {
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      requests[index].status = "borrowed";
+      localStorage.setItem("requests", JSON.stringify(requests));
 
-      // Remove from requests
-      requests.splice(index, 1);
-      localStorage.setItem("returnRequests", JSON.stringify(requests));
-
-      // Update Profile → remove from Lent and add to My Books
+      // Update lentBooks
       let lent = JSON.parse(localStorage.getItem("lentBooks")) || [];
-      lent = lent.filter(b => b.book !== completed.book); // remove from lent
+      lent.push({ book: requests[index].book, borrower: requests[index].borrower });
       localStorage.setItem("lentBooks", JSON.stringify(lent));
 
+      loadRequests();
+    }
+
+    function rejectRequest(index) {
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      requests[index].status = "rejected";
+      localStorage.setItem("requests", JSON.stringify(requests));
+      loadRequests();
+    }
+
+    function markReturned(index) {
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      const returned = requests[index];
+      requests[index].status = "returned";
+      localStorage.setItem("requests", JSON.stringify(requests));
+
+      // Remove from lentBooks
+      let lent = JSON.parse(localStorage.getItem("lentBooks")) || [];
+      lent = lent.filter(b => b.book !== returned.book);
+      localStorage.setItem("lentBooks", JSON.stringify(lent));
+
+      // Move back to My Books
       let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
-      myBooks.push(completed.book);
+      myBooks.push(returned.book);
       localStorage.setItem("myBooks", JSON.stringify(myBooks));
 
       loadRequests();
-      alert(`✅ "${completed.book}" marked as returned and moved back to My Books`);
+      alert(`✅ "${returned.book}" returned to ${returned.owner}`);
     }
 
-    window.onload = loadRequests;
+    document.addEventListener("DOMContentLoaded", loadRequests);
   </script>
 </body>
 </html>

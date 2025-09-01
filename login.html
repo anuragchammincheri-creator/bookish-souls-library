@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Bookish Soul's Library</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f8f5f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 300px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 0.7rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background: #4a6fa5;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2e3a59;
+    }
+    p {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    a {
+      color: #4a6fa5;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="login()">Login</button>
+    <p>Don’t have an account? <a href="signup.html">Sign Up</a></p>
+    <p id="message" style="color:red;"></p>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBvplQCpz-pIeT8ptEDF8Gj2acD9gcE_JA",
+      authDomain: "bookish-soul-s-library.firebaseapp.com",
+      projectId: "bookish-soul-s-library",
+      storageBucket: "bookish-soul-s-library.firebasestorage.app",
+      messagingSenderId: "718849773540",
+      appId: "1:718849773540:web:e9b42aad3427e081a5c1f1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    async function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("message");
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Login successful!");
+        window.location.href = "profile.html";
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    }
+  </script>
+</body>
+  </html>

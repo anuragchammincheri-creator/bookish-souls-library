@@ -24,136 +24,73 @@
       font-weight: bold;
     }
 
-    /* Notification Icon */
-    .notification {
-      position: relative;
-      margin-right: 1rem;
-      cursor: pointer;
-    }
-
-    .notification .bell {
-      font-size: 1.6rem;
-    }
-
+    /* Notification */
+    .notification { position: relative; margin-right: 1rem; cursor: pointer; }
+    .notification .bell { font-size: 1.6rem; }
     .notification-badge {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: red;
-      color: white;
-      font-size: 0.7rem;
-      padding: 2px 5px;
-      border-radius: 50%;
+      position: absolute; top: -5px; right: -5px;
+      background: red; color: white; font-size: 0.7rem;
+      padding: 2px 5px; border-radius: 50%;
     }
-
     .dropdown {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 35px;
-      background: white;
-      width: 350px;
-      max-height: 300px;
-      overflow-y: auto;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      border-radius: 8px;
-      z-index: 10;
+      display: none; position: absolute; right: 0; top: 35px;
+      background: white; width: 350px; max-height: 300px; overflow-y: auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2); border-radius: 8px; z-index: 10;
     }
-
-    .dropdown.active {
-      display: block;
-    }
-
+    .dropdown.active { display: block; }
     .dropdown h4 {
-      margin: 0;
-      padding: 0.7rem;
-      background: #4a6fa5;
-      color: white;
-      font-size: 1rem;
-      position: sticky;
-      top: 0;
+      margin: 0; padding: 0.7rem; background: #4a6fa5; color: white;
+      font-size: 1rem; position: sticky; top: 0;
     }
-
-    .dropdown ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
+    .dropdown ul { list-style: none; margin: 0; padding: 0; }
     .dropdown ul li {
-      display: flex;
-      gap: 10px;
-      padding: 0.8rem;
-      border-bottom: 1px solid #eee;
-      font-size: 0.9rem;
-      align-items: center;
+      display: flex; gap: 10px; padding: 0.8rem; border-bottom: 1px solid #eee;
+      font-size: 0.9rem; align-items: center;
     }
-
     .dropdown ul li img {
-      width: 40px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 4px;
+      width: 40px; height: 60px; object-fit: cover; border-radius: 4px;
     }
+    .notif-text { display: flex; flex-direction: column; }
+    .notif-text strong { color: #2e3a59; }
+    .notif-text span { font-size: 0.85rem; color: #555; }
+    .notif-text em { font-size: 0.8rem; color: #d9534f; }
 
-    .notif-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .notif-text strong {
-      color: #2e3a59;
-    }
-
-    .notif-text span {
-      font-size: 0.85rem;
-      color: #555;
-    }
-
-    .notif-text em {
-      font-size: 0.8rem;
-      color: #d9534f; /* red tone for alerts */
-    }
-
+    /* Navbar */
     .navbar {
       background: #4a6fa5;
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 0.8rem;
-      border-bottom: 3px solid #2e3a59;
+      display: flex; justify-content: center; gap: 1.5rem;
+      padding: 0.8rem; border-bottom: 3px solid #2e3a59;
     }
-
     .navbar a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: bold;
-      transition: color 0.3s, background 0.3s;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
+      color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold;
+      transition: color 0.3s, background 0.3s; padding: 0.3rem 0.6rem; border-radius: 6px;
     }
+    .navbar a:hover { background: white; color: #4a6fa5; }
 
-    .navbar a:hover {
-      background: white;
-      color: #4a6fa5;
+    /* Main Content */
+    main { padding: 2rem; max-width: 900px; margin: auto; text-align: center; }
+    h1 { color: #2e3a59; }
+
+    /* Events */
+    .event-card {
+      background: white; padding: 1rem; margin: 1rem 0;
+      border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: left;
     }
+    .event-card h2 { margin: 0; color: #4a6fa5; }
+    .event-card p { margin: 0.3rem 0; }
 
-    main {
-      padding: 2rem;
-      text-align: center;
-    }
-
-    h1 {
-      color: #2e3a59;
-    }
-
+    /* Footer */
     footer {
-      margin-top: 3rem;
-      background: #4a6fa5;
-      color: white;
-      text-align: center;
-      padding: 1rem;
+      margin-top: 3rem; background: #4a6fa5; color: white;
+      text-align: center; padding: 1rem; position: relative;
+    }
+    .creator {
+      margin-top: 0.5rem;
+      font-family: 'Georgia', serif;
+      font-size: 1rem;
+      color: #ffe8cc;
+      font-style: italic;
     }
   </style>
 </head>
@@ -165,9 +102,7 @@
       <span class="notification-badge" id="notifBadge">0</span>
       <div class="dropdown" id="notifDropdown">
         <h4>Notifications</h4>
-        <ul id="notifList">
-          <!-- Notifications injected by JS -->
-        </ul>
+        <ul id="notifList"></ul>
       </div>
     </div>
   </header>
@@ -184,10 +119,14 @@
     <h1>Welcome to Bookish Soul's Library</h1>
     <p>A community-driven free library where readers share and borrow books.</p>
     <p>Explore the catalog, request books, and connect with fellow book lovers 📚✨</p>
+
+    <h1>📅 Upcoming Events</h1>
+    <div id="events"></div>
   </main>
 
   <footer>
     &copy; 2025 Bookish Soul's Library
+    <div class="creator">– Anurag Ramachandran –</div>
   </footer>
 
   <script>
@@ -195,15 +134,11 @@
       document.getElementById("notifDropdown").classList.toggle("active");
     }
 
-    // Load notifications from localStorage (temporary, will move to Firestore later)
     function loadNotifications() {
       const notifList = document.getElementById("notifList");
       notifList.innerHTML = "";
-
       let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
-      let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar"; 
-      // ⚠️ later this will come from Firebase Auth
-
+      let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar";
       let myNotifications = requests.filter(req => req.borrower === currentUser);
 
       if (myNotifications.length === 0) {
@@ -222,11 +157,49 @@
           notifList.appendChild(li);
         });
       }
-
       document.getElementById("notifBadge").textContent = myNotifications.length;
     }
 
     loadNotifications();
+
+    // Load Events (auto-generated from requests)
+    function loadEvents(){
+      const requests=JSON.parse(localStorage.getItem("requests"))||[];
+      const eventDiv=document.getElementById("events");
+      eventDiv.innerHTML="";
+
+      if(requests.length===0){
+        eventDiv.innerHTML="<p>No events scheduled yet. Borrow more books to create reading trends! 📚</p>";
+        return;
+      }
+
+      const bookCount={};
+      requests.forEach(r=>{
+        if(r.status==="borrowed"||r.status==="returned"){
+          bookCount[r.title]=(bookCount[r.title]||0)+1;
+        }
+      });
+
+      const topBooks=Object.entries(bookCount).sort((a,b)=>b[1]-a[1]).slice(0,3);
+
+      if(topBooks.length===0){
+        eventDiv.innerHTML="<p>No active events. Start borrowing to unlock book club events! 📖</p>";
+        return;
+      }
+
+      topBooks.forEach(([title,count],idx)=>{
+        const card=document.createElement("div");
+        card.className="event-card";
+        card.innerHTML=`
+          <h2>📚 ${title} - Reading Meetup</h2>
+          <p><strong>Date:</strong> ${new Date(Date.now() + (idx+1)*7*24*60*60*1000).toDateString()}</p>
+          <p><strong>Location:</strong> Online Book Club</p>
+          <p><strong>Readers Count:</strong> ${count} people borrowed/requested this book</p>
+        `;
+        eventDiv.appendChild(card);
+      });
+    }
+    loadEvents();
   </script>
 
   <!-- ✅ Firebase Setup -->
@@ -245,7 +218,6 @@
       appId: "1:718849773540:web:e9b42aad3427e081a5c1f1"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);

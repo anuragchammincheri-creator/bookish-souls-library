@@ -10,6 +10,7 @@
     .navbar { background: #4a6fa5; display: flex; justify-content: center; gap: 1.5rem; padding: 0.8rem; border-bottom: 3px solid #2e3a59; }
     .navbar a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold; transition: 0.3s; padding: 0.3rem 0.6rem; border-radius: 6px; }
     .navbar a:hover { background: white; color: #4a6fa5; }
+    .navbar button { background:#888; color:#fff; border:none; border-radius:6px; padding:0.3rem 0.8rem; cursor:pointer; }
     main { padding: 2rem; max-width: 900px; margin: auto; }
     h1 { text-align: center; color: #2e3a59; margin-bottom: 1rem; }
     h2 { margin-top: 2rem; color: #2e3a59; }
@@ -35,6 +36,7 @@
     <a href="catalog.html">📚 Catalog</a>
     <a href="requests.html">📬 Requests</a>
     <a href="profile.html">👤 Profile</a>
+    <button id="logoutBtn">🚪 Logout</button>
   </nav>
 
   <main>
@@ -47,102 +49,125 @@
     <div id="incomingRequests"></div>
   </main>
 
-  <footer>
-    &copy; 2025 Bookish Soul's Library
-  </footer>
+  <footer>&copy; 2025 Bookish Soul's Library</footer>
 
-  <script>
-    function loadRequests() {
-      let requests = JSON.parse(localStorage.getItem("requests")) || [];
-      let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar";
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-      const outgoingDiv = document.getElementById("outgoingRequests");
-      const incomingDiv = document.getElementById("incomingRequests");
-      outgoingDiv.innerHTML = "";
-      incomingDiv.innerHTML = "";
+    const firebaseConfig = { /* your firebaseConfig */ };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-      if (requests.length === 0) {
-        outgoingDiv.innerHTML = "<p>No requests yet 📭</p>";
-        incomingDiv.innerHTML = "<p>No requests yet 📭</p>";
+    const lsGet=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f;}catch{return f;}};
+    const lsSet=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+
+    let currentUserEmail="";
+
+    function loadRequests(){
+      const requests=lsGet("requests",[]);
+      const outgoingDiv=document.getElementById("outgoingRequests");
+      const incomingDiv=document.getElementById("incomingRequests");
+      outgoingDiv.innerHTML="";
+      incomingDiv.innerHTML="";
+
+      if(requests.length===0){
+        outgoingDiv.innerHTML="<p>No requests yet 📭</p>";
+        incomingDiv.innerHTML="<p>No requests yet 📭</p>";
         return;
       }
 
-      requests.forEach((req, index) => {
-        let card = document.createElement("div");
-        card.className = "request-card";
-        card.innerHTML = `
+      requests.forEach((req,idx)=>{
+        const card=document.createElement("div");
+        card.className="request-card";
+        card.innerHTML=`
           <div class="request-header">
-            <img src="${req.img || 'https://via.placeholder.com/80x120'}" alt="${req.book}">
+            <img src="${req.img||'https://via.placeholder.com/80x120'}" alt="${req.title}">
             <div class="request-info">
-              <h3>${req.book}</h3>
+              <h3>${req.title}</h3>
               <p><strong>Owner:</strong> ${req.owner}</p>
               <p><strong>Requester:</strong> ${req.requester}</p>
               <p><strong>Status:</strong> ${req.status}</p>
             </div>
           </div>
-          <div class="request-actions">
-            ${req.owner === currentUser && req.status === "pending" ? `
-              <button class="approve" onclick="approveRequest(${index})">✅ Approve</button>
-              <button class="reject" onclick="rejectRequest(${index})">❌ Reject</button>
-            ` : ""}
-            ${req.owner === currentUser && req.status === "borrowed" ? `
-              <button class="return" onclick="markReturned(${index})">📦 Mark as Returned</button>
-            ` : ""}
-          </div>
+          <div class="request-actions"></div>
         `;
+        const actions=card.querySelector(".request-actions");
 
-        if (req.requester === currentUser) {
+        // Owner can approve/reject
+        if(req.owner===currentUserEmail && req.status==="pending"){
+          const approveBtn=document.createElement("button");
+          approveBtn.textContent="✅ Approve";
+          approveBtn.className="approve";
+          approveBtn.onclick=()=>approveRequest(idx);
+          actions.appendChild(approveBtn);
+
+          const rejectBtn=document.createElement("button");
+          rejectBtn.textContent="❌ Reject";
+          rejectBtn.className="reject";
+          rejectBtn.onclick=()=>rejectRequest(idx);
+          actions.appendChild(rejectBtn);
+        }
+
+        // Owner can mark return
+        if(req.owner===currentUserEmail && req.status==="borrowed"){
+          const returnBtn=document.createElement("button");
+          returnBtn.textContent="📦 Mark Returned";
+          returnBtn.className="return";
+          returnBtn.onclick=()=>markReturned(idx);
+          actions.appendChild(returnBtn);
+        }
+
+        if(req.requester===currentUserEmail){
           outgoingDiv.appendChild(card);
-        } else if (req.owner === currentUser) {
+        } else if(req.owner===currentUserEmail){
           incomingDiv.appendChild(card);
         }
       });
     }
 
-    function approveRequest(index) {
-      let requests = JSON.parse(localStorage.getItem("requests")) || [];
-      requests[index].status = "borrowed";
-      localStorage.setItem("requests", JSON.stringify(requests));
-
-      // Add to lentBooks
-      let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || [];
-      lentBooks.push({
-        book: { title: requests[index].book, img: requests[index].img },
-        borrower: requests[index].requester
-      });
-      localStorage.setItem("lentBooks", JSON.stringify(lentBooks));
-
+    function approveRequest(idx){
+      const requests=lsGet("requests",[]);
+      requests[idx].status="borrowed";
+      lsSet("requests",requests);
       loadRequests();
     }
 
-    function rejectRequest(index) {
-      let requests = JSON.parse(localStorage.getItem("requests")) || [];
-      requests[index].status = "rejected";
-      localStorage.setItem("requests", JSON.stringify(requests));
+    function rejectRequest(idx){
+      const requests=lsGet("requests",[]);
+      requests[idx].status="rejected";
+      lsSet("requests",requests);
       loadRequests();
     }
 
-    function markReturned(index) {
-      let requests = JSON.parse(localStorage.getItem("requests")) || [];
-      const returned = requests[index];
-      requests[index].status = "returned";
-      localStorage.setItem("requests", JSON.stringify(requests));
+    function markReturned(idx){
+      const requests=lsGet("requests",[]);
+      const returned=requests[idx];
+      requests[idx].status="returned";
+      lsSet("requests",requests);
 
-      // Remove from lentBooks
-      let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || [];
-      lentBooks = lentBooks.filter(b => b.book.title !== returned.book);
-      localStorage.setItem("lentBooks", JSON.stringify(lentBooks));
+      // Restore book to owner's myBooks
+      const myBooks=lsGet("myBooks",[]);
+      if(returned.owner===currentUserEmail){
+        myBooks.push({ title: returned.title, author: returned.author, img: returned.img, owner: returned.owner });
+        lsSet("myBooks",myBooks);
+      }
 
-      // Restore to myBooks
-      let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
-      myBooks.push({ title: returned.book, img: returned.img });
-      localStorage.setItem("myBooks", JSON.stringify(myBooks));
-
+      alert(`✅ "${returned.title}" returned!`);
       loadRequests();
-      alert(`✅ "${returned.book}" returned to ${returned.owner}`);
     }
 
-    document.addEventListener("DOMContentLoaded", loadRequests);
+    document.getElementById("logoutBtn").addEventListener("click",()=>signOut(auth));
+
+    onAuthStateChanged(auth,(user)=>{
+      if(user){
+        currentUserEmail=user.email;
+        loadRequests();
+      }else{
+        window.location.href="login.html";
+      }
+    });
   </script>
 </body>
 </html>

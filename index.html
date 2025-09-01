@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bookish Soul's Library - Home</title>
+  <title>Profile - Bookish Soul's Library</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -18,96 +18,81 @@
       color: white;
       padding: 1rem;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       font-size: 1.5rem;
       font-weight: bold;
     }
 
-    /* Notification */
-    .notification { position: relative; margin-right: 1rem; cursor: pointer; }
-    .notification .bell { font-size: 1.6rem; }
-    .notification-badge {
-      position: absolute; top: -5px; right: -5px;
-      background: red; color: white; font-size: 0.7rem;
-      padding: 2px 5px; border-radius: 50%;
-    }
-    .dropdown {
-      display: none; position: absolute; right: 0; top: 35px;
-      background: white; width: 350px; max-height: 300px; overflow-y: auto;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2); border-radius: 8px; z-index: 10;
-    }
-    .dropdown.active { display: block; }
-    .dropdown h4 {
-      margin: 0; padding: 0.7rem; background: #4a6fa5; color: white;
-      font-size: 1rem; position: sticky; top: 0;
-    }
-    .dropdown ul { list-style: none; margin: 0; padding: 0; }
-    .dropdown ul li {
-      display: flex; gap: 10px; padding: 0.8rem; border-bottom: 1px solid #eee;
-      font-size: 0.9rem; align-items: center;
-    }
-    .dropdown ul li img {
-      width: 40px; height: 60px; object-fit: cover; border-radius: 4px;
-    }
-    .notif-text { display: flex; flex-direction: column; }
-    .notif-text strong { color: #2e3a59; }
-    .notif-text span { font-size: 0.85rem; color: #555; }
-    .notif-text em { font-size: 0.8rem; color: #d9534f; }
-
-    /* Navbar */
     .navbar {
       background: #4a6fa5;
-      display: flex; justify-content: center; gap: 1.5rem;
-      padding: 0.8rem; border-bottom: 3px solid #2e3a59;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 0.8rem;
+      border-bottom: 3px solid #2e3a59;
     }
     .navbar a {
-      color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold;
-      transition: color 0.3s, background 0.3s; padding: 0.3rem 0.6rem; border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: color 0.3s, background 0.3s;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
     }
-    .navbar a:hover { background: white; color: #4a6fa5; }
-
-    /* Main Content */
-    main { padding: 2rem; max-width: 900px; margin: auto; text-align: center; }
-    h1 { color: #2e3a59; }
-
-    /* Events */
-    .event-card {
-      background: white; padding: 1rem; margin: 1rem 0;
-      border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      text-align: left;
+    .navbar a:hover {
+      background: white;
+      color: #4a6fa5;
     }
-    .event-card h2 { margin: 0; color: #4a6fa5; }
-    .event-card p { margin: 0.3rem 0; }
 
-    /* Footer */
+    main {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 { color: #2e3a59; margin-bottom: 1rem; }
+    section { margin-bottom: 2rem; }
+
+    .book-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .book-card {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .book-card h3 { margin: 0; color: #4a6fa5; }
+    .book-card button {
+      background: #4a6fa5;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .book-card button:hover { background: #2e3a59; }
+
     footer {
-      margin-top: 3rem; background: #4a6fa5; color: white;
-      text-align: center; padding: 1rem; position: relative;
-    }
-    .creator {
-      margin-top: 0.5rem;
-      font-family: 'Georgia', serif;
-      font-size: 1rem;
-      color: #ffe8cc;
-      font-style: italic;
+      margin-top: 3rem;
+      background: #4a6fa5;
+      color: white;
+      text-align: center;
+      padding: 1rem;
     }
   </style>
 </head>
 <body>
-  <header>
-    📚 Bookish Soul's Library
-    <div class="notification" onclick="toggleDropdown()">
-      <span class="bell">🔔</span>
-      <span class="notification-badge" id="notifBadge">0</span>
-      <div class="dropdown" id="notifDropdown">
-        <h4>Notifications</h4>
-        <ul id="notifList"></ul>
-      </div>
-    </div>
-  </header>
+  <header>👤 Profile</header>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <a href="index.html">🏠 Home</a>
     <a href="catalog.html">📚 Catalog</a>
@@ -116,114 +101,96 @@
   </nav>
 
   <main>
-    <h1>Welcome to Bookish Soul's Library</h1>
-    <p>A community-driven free library where readers share and borrow books.</p>
-    <p>Explore the catalog, request books, and connect with fellow book lovers 📚✨</p>
+    <h1>My Profile</h1>
 
-    <h1>📅 Upcoming Events</h1>
-    <div id="events"></div>
+    <section>
+      <h2>My Books</h2>
+      <div id="myBooks" class="book-list"></div>
+    </section>
+
+    <section>
+      <h2>Books I Lent</h2>
+      <div id="lentBooks" class="book-list"></div>
+    </section>
+
+    <section>
+      <h2>Books I Borrowed</h2>
+      <div id="borrowedBooks" class="book-list"></div>
+    </section>
   </main>
 
   <footer>
     &copy; 2025 Bookish Soul's Library
-    <div class="creator">– Anurag Ramachandran –</div>
   </footer>
 
   <script>
-    function toggleDropdown() {
-      document.getElementById("notifDropdown").classList.toggle("active");
-    }
+    function loadProfile() {
+      const myBooksDiv = document.getElementById("myBooks");
+      const lentBooksDiv = document.getElementById("lentBooks");
+      const borrowedBooksDiv = document.getElementById("borrowedBooks");
 
-    function loadNotifications() {
-      const notifList = document.getElementById("notifList");
-      notifList.innerHTML = "";
-      let requests = JSON.parse(localStorage.getItem("returnRequests")) || [];
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
       let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar";
-      let myNotifications = requests.filter(req => req.borrower === currentUser);
 
-      if (myNotifications.length === 0) {
-        notifList.innerHTML = "<li style='padding:1rem;text-align:center;color:#555;'>No notifications</li>";
+      // Clear old content
+      myBooksDiv.innerHTML = "";
+      lentBooksDiv.innerHTML = "";
+      borrowedBooksDiv.innerHTML = "";
+
+      // My books (not lent out)
+      let myBooks = requests.filter(r => r.owner === currentUser && r.status === "available");
+      if (myBooks.length === 0) {
+        myBooksDiv.innerHTML = "<p>No books added yet.</p>";
       } else {
-        myNotifications.forEach(req => {
-          const li = document.createElement("li");
-          li.innerHTML = `
-            <img src="${req.cover || 'https://via.placeholder.com/40x60'}" alt="${req.book}">
-            <div class="notif-text">
-              <strong>${req.book}</strong>
-              <span>Owner: ${req.owner}</span>
-              <em>${req.message || 'Please return the book you borrowed'}</em>
-            </div>
-          `;
-          notifList.appendChild(li);
+        myBooks.forEach(book => {
+          const div = document.createElement("div");
+          div.className = "book-card";
+          div.innerHTML = `<h3>${book.title}</h3>`;
+          myBooksDiv.appendChild(div);
         });
       }
-      document.getElementById("notifBadge").textContent = myNotifications.length;
-    }
 
-    loadNotifications();
-
-    // Load Events (auto-generated from requests)
-    function loadEvents(){
-      const requests=JSON.parse(localStorage.getItem("requests"))||[];
-      const eventDiv=document.getElementById("events");
-      eventDiv.innerHTML="";
-
-      if(requests.length===0){
-        eventDiv.innerHTML="<p>No events scheduled yet. Borrow more books to create reading trends! 📚</p>";
-        return;
+      // Lent books
+      let lentBooks = requests.filter(r => r.owner === currentUser && r.status === "borrowed");
+      if (lentBooks.length === 0) {
+        lentBooksDiv.innerHTML = "<p>No books lent.</p>";
+      } else {
+        lentBooks.forEach(book => {
+          const div = document.createElement("div");
+          div.className = "book-card";
+          div.innerHTML = `
+            <h3>${book.title}</h3>
+            <button onclick="markReturned('${book.id}')">Mark as Returned</button>
+          `;
+          lentBooksDiv.appendChild(div);
+        });
       }
 
-      const bookCount={};
-      requests.forEach(r=>{
-        if(r.status==="borrowed"||r.status==="returned"){
-          bookCount[r.title]=(bookCount[r.title]||0)+1;
-        }
-      });
-
-      const topBooks=Object.entries(bookCount).sort((a,b)=>b[1]-a[1]).slice(0,3);
-
-      if(topBooks.length===0){
-        eventDiv.innerHTML="<p>No active events. Start borrowing to unlock book club events! 📖</p>";
-        return;
+      // Borrowed books
+      let borrowedBooks = requests.filter(r => r.borrower === currentUser && r.status === "borrowed");
+      if (borrowedBooks.length === 0) {
+        borrowedBooksDiv.innerHTML = "<p>No books borrowed.</p>";
+      } else {
+        borrowedBooks.forEach(book => {
+          const div = document.createElement("div");
+          div.className = "book-card";
+          div.innerHTML = `<h3>${book.title}</h3>`;
+          borrowedBooksDiv.appendChild(div);
+        });
       }
-
-      topBooks.forEach(([title,count],idx)=>{
-        const card=document.createElement("div");
-        card.className="event-card";
-        card.innerHTML=`
-          <h2>📚 ${title} - Reading Meetup</h2>
-          <p><strong>Date:</strong> ${new Date(Date.now() + (idx+1)*7*24*60*60*1000).toDateString()}</p>
-          <p><strong>Location:</strong> Online Book Club</p>
-          <p><strong>Readers Count:</strong> ${count} people borrowed/requested this book</p>
-        `;
-        eventDiv.appendChild(card);
-      });
     }
-    loadEvents();
-  </script>
 
-  <!-- ✅ Firebase Setup -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-    import { getStorage } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
+    function markReturned(bookId) {
+      let requests = JSON.parse(localStorage.getItem("requests")) || [];
+      requests = requests.map(r => {
+        if (r.id === bookId) r.status = "returned";
+        return r;
+      });
+      localStorage.setItem("requests", JSON.stringify(requests));
+      loadProfile();
+    }
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBvplQCpz-pIeT8ptEDF8Gj2acD9gcE_JA",
-      authDomain: "bookish-soul-s-library.firebaseapp.com",
-      projectId: "bookish-soul-s-library",
-      storageBucket: "bookish-soul-s-library.firebasestorage.app",
-      messagingSenderId: "718849773540",
-      appId: "1:718849773540:web:e9b42aad3427e081a5c1f1"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
-
-    console.log("🔥 Firebase Connected!");
+    loadProfile();
   </script>
 </body>
 </html>

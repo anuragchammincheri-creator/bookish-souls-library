@@ -217,5 +217,58 @@
 
     console.log("🔥 Firebase Connected!");
   </script>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // 🔥 Replace with your actual Firebase config
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function seedData() {
+    try {
+      // 📚 Books
+      const books = [
+        { title: "The Alchemist", author: "Paulo Coelho", available: true, cover: "https://covers.openlibrary.org/b/id/8231996-L.jpg" },
+        { title: "Atomic Habits", author: "James Clear", available: true, cover: "https://covers.openlibrary.org/b/id/9254155-L.jpg" },
+        { title: "Harry Potter and the Sorcerer's Stone", author: "J.K. Rowling", available: true, cover: "https://covers.openlibrary.org/b/id/7984916-L.jpg" },
+        { title: "The Power of Now", author: "Eckhart Tolle", available: true, cover: "https://covers.openlibrary.org/b/id/240726-L.jpg" },
+        { title: "Think and Grow Rich", author: "Napoleon Hill", available: true, cover: "https://covers.openlibrary.org/b/id/10909258-L.jpg" }
+      ];
+      for (let book of books) await addDoc(collection(db, "books"), book);
+
+      // 👤 Users
+      const users = [
+        { name: "Alice Reader", email: "alice@example.com" },
+        { name: "Bob Writer", email: "bob@example.com" },
+        { name: "Charlie Borrower", email: "charlie@example.com" }
+      ];
+      for (let user of users) await addDoc(collection(db, "users"), user);
+
+      // 📬 Requests
+      const requests = [
+        { book: "The Alchemist", borrower: "Alice Reader", status: "pending" },
+        { book: "Atomic Habits", borrower: "Charlie Borrower", status: "borrowed" }
+      ];
+      for (let req of requests) await addDoc(collection(db, "requests"), req);
+
+      console.log("✅ Dummy data seeded successfully!");
+      alert("Firestore dummy data added! Check your Firebase Console.");
+    } catch (e) {
+      console.error("❌ Error seeding data:", e);
+    }
+  }
+
+  seedData();
+  </script>
 </body>
 </html>

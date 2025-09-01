@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Catalog - Bookish Soul's Library</title>
   <style>
-    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f8f5f2; color: #333; }
-    header { background: #4a6fa5; color: white; padding: 1rem; text-align: center; font-size: 1.5rem; font-weight: bold; }
-    .navbar { background: #4a6fa5; display: flex; justify-content: center; gap: 1.5rem; padding: 0.8rem; border-bottom: 3px solid #2e3a59; }
-    .navbar a { color: white; text-decoration: none; font-size: 1.1rem; font-weight: bold; padding: 0.3rem 0.6rem; border-radius: 6px; transition: 0.3s; }
-    .navbar a:hover { background: white; color: #4a6fa5; }
-    main { padding: 2rem; }
-    h1 { text-align: center; color: #2e3a59; }
-    .catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-    .book-card { background: white; border-radius: 10px; padding: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; }
-    .book-card img { width: 120px; height: 160px; object-fit: cover; border-radius: 6px; }
-    .book-card h3 { margin: 0.5rem 0 0.3rem; color: #2e3a59; }
-    .book-card p { margin: 0.3rem 0; font-size: 0.9rem; }
-    .book-card button { margin-top: 0.5rem; padding: 0.5rem 1rem; background: #4a6fa5; color: white; border: none; border-radius: 6px; cursor: pointer; }
-    .book-card button:hover { background: #2e3a59; }
-    .book-card button:disabled { background: #ccc; cursor: not-allowed; }
-    footer { margin-top: 3rem; background: #4a6fa5; color: white; text-align: center; padding: 1rem; }
+    body { font-family:'Poppins',sans-serif; margin:0; padding:0; background:#f8f5f2; color:#333; }
+    header { background:#4a6fa5; color:#fff; padding:1rem; text-align:center; font-size:1.5rem; font-weight:bold; }
+    .navbar { background:#4a6fa5; display:flex; justify-content:center; gap:1.5rem; padding:0.8rem; }
+    .navbar a { color:#fff; text-decoration:none; font-weight:bold; font-size:1.1rem; padding:0.3rem 0.6rem; border-radius:6px; }
+    .navbar a:hover { background:#fff; color:#4a6fa5; }
+    .navbar button { background:#888; color:#fff; border:none; border-radius:6px; padding:0.3rem 0.8rem; cursor:pointer; }
+    main { padding:2rem; max-width:1100px; margin:auto; }
+    h2 { margin:1rem 0; color:#2e3a59; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.2rem; }
+    .card { background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.08); padding:1rem; text-align:center; }
+    .card img { width:110px; height:150px; object-fit:cover; border-radius:6px; }
+    .card h3 { margin:0.5rem 0 0.2rem; font-size:1.05rem; color:#2e3a59; }
+    .card p { margin:0.25rem 0; font-size:0.9rem; color:#555; }
+    .card button { margin-top:0.5rem; padding:0.5rem 0.8rem; border:none; border-radius:8px; background:#4a6fa5; color:#fff; cursor:pointer; font-size:0.9rem; }
+    .card button:hover { background:#2e3a59; }
+    .empty { padding:1rem; text-align:center; color:#666; }
+    footer { margin-top:2rem; background:#4a6fa5; color:#fff; text-align:center; padding:1rem; }
   </style>
 </head>
 <body>
@@ -31,110 +32,81 @@
     <a href="catalog.html">📚 Catalog</a>
     <a href="profile.html">👤 Profile</a>
     <a href="requests.html">📬 Requests</a>
+    <button id="logoutBtn">🚪 Logout</button>
   </nav>
 
   <main>
-    <h1>Available Books</h1>
-    <div class="catalog" id="catalog"></div>
+    <h2>Available Books</h2>
+    <div class="grid" id="catalogList"></div>
   </main>
 
-  <footer>
-    &copy; 2025 Bookish Soul's Library
-  </footer>
+  <footer>&copy; 2025 Bookish Soul's Library</footer>
 
-  <script>
-    // dummy books on first run
-    const dummyBooks = [
-      { title: "The Alchemist", author: "Paulo Coelho", description: "A journey of dreams and destiny.", img: "https://covers.openlibrary.org/b/id/8101356-L.jpg", owner: "Anita", status: "available" },
-      { title: "1984", author: "George Orwell", description: "Dystopian society under surveillance.", img: "https://covers.openlibrary.org/b/id/7222246-L.jpg", owner: "Rahul", status: "available" },
-      { title: "Harry Potter", author: "J.K. Rowling", description: "The boy who lived.", img: "https://covers.openlibrary.org/b/id/7984916-L.jpg", owner: "Sneha", status: "available" }
-    ];
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-    function loadCatalog() {
-      let catalogDiv = document.getElementById("catalog");
-      catalogDiv.innerHTML = "";
+    const firebaseConfig = { /* your firebaseConfig */ };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-      let myBooks = JSON.parse(localStorage.getItem("myBooks")) || [];
-      let lentBooks = JSON.parse(localStorage.getItem("lentBooks")) || [];
-      let requests = JSON.parse(localStorage.getItem("requests")) || [];
-      let allBooks = JSON.parse(localStorage.getItem("allBooks")) || [];
+    // Helpers
+    const lsGet=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f;}catch{return f;}};
+    const lsSet=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 
-      // if no allBooks, initialize with dummy ones
-      if (allBooks.length === 0) {
-        allBooks = dummyBooks;
-        localStorage.setItem("allBooks", JSON.stringify(allBooks));
-      }
+    let currentUserEmail="";
 
-      // add myBooks (if not already in allBooks)
-      myBooks.forEach(book => {
-        if (!allBooks.find(b => b.title === book.title)) {
-          allBooks.push({ ...book, owner: "You", status: "available" });
-        }
-      });
+    function renderCatalog(){
+      const container=document.getElementById("catalogList");
+      container.innerHTML="";
 
-      // merge lentBooks
-      lentBooks.forEach(item => {
-        if (!allBooks.find(b => b.title === item.book.title)) {
-          allBooks.push({ ...item.book, owner: "You", status: "lent", borrower: item.borrower });
-        }
-      });
+      const myBooks=lsGet("myBooks",[]);
+      const allRequests=lsGet("requests",[]);
+      const lentBooks=lsGet("lentBooks",[]);
+      const borrowedBooks=lsGet("borrowedBooks",[]);
 
-      // save merged
-      localStorage.setItem("allBooks", JSON.stringify(allBooks));
+      // 🔑 Only show books not owned by me
+      const booksForCatalog=myBooks.filter(b=>b.owner!==currentUserEmail);
 
-      if (allBooks.length === 0) {
-        catalogDiv.innerHTML = "<p>No books in catalog yet 📭</p>";
-        return;
-      }
+      if(booksForCatalog.length===0){ container.innerHTML=`<p class="empty">No books available right now.</p>`; return; }
 
-      allBooks.forEach(book => {
-        let card = document.createElement("div");
-        card.classList.add("book-card");
-
-        let statusText = "✅ Available";
-        let buttonHTML = `<button onclick="requestBook('${book.title}', '${book.owner}')">Request Book</button>`;
-
-        if (book.status === "lent") {
-          statusText = `❌ Borrowed by ${book.borrower || "Someone"}`;
-          buttonHTML = `<button disabled>Not Available</button>`;
-        }
-
-        // pending request?
-        let pendingReq = requests.find(r => r.book === book.title && r.status === "pending");
-        if (pendingReq) {
-          buttonHTML = `<button disabled>Request Pending</button>`;
-        }
-
-        card.innerHTML = `
-          <img src="${book.img || 'https://via.placeholder.com/120x160?text=Book'}" alt="${book.title}">
+      booksForCatalog.forEach(book=>{
+        const card=document.createElement("div");
+        card.className="card";
+        card.innerHTML=`
+          <img src="${book.img||'https://via.placeholder.com/110x150'}" alt="${book.title}"/>
           <h3>${book.title}</h3>
-          <p><em>${book.author}</em></p>
-          <p>${book.description || ""}</p>
-          <p>Owner: ${book.owner}</p>
-          <p>Status: ${statusText}</p>
-          ${buttonHTML}
+          <p>by ${book.author}</p>
+          <p><small>${book.description||''}</small></p>
         `;
-        catalogDiv.appendChild(card);
+        const btn=document.createElement("button");
+        btn.textContent="📩 Request Book";
+        btn.onclick=()=>{
+          // check if already requested
+          const already=allRequests.some(r=>r.title===book.title&&r.requester===currentUserEmail);
+          if(already){ alert("⚠️ Already requested this book."); return; }
+
+          allRequests.push({ ...book, requester:currentUserEmail, status:"pending" });
+          lsSet("requests",allRequests);
+          alert("✅ Request sent!");
+        };
+        card.appendChild(btn);
+        container.appendChild(card);
       });
     }
 
-    function requestBook(bookName, ownerName) {
-      let requests = JSON.parse(localStorage.getItem("requests")) || [];
-      let currentUser = localStorage.getItem("currentUser") || "Ravi Kumar";
+    // Events
+    document.getElementById("logoutBtn").addEventListener("click",()=>signOut(auth));
 
-      requests.push({
-        book: bookName,
-        owner: ownerName,
-        requester: currentUser,
-        status: "pending"
-      });
-
-      localStorage.setItem("requests", JSON.stringify(requests));
-      alert("📩 Request sent to " + ownerName);
-      loadCatalog();
-    }
-
-    document.addEventListener("DOMContentLoaded", loadCatalog);
+    onAuthStateChanged(auth,(user)=>{
+      if(user){
+        currentUserEmail=user.email;
+        renderCatalog();
+      } else {
+        window.location.href="login.html";
+      }
+    });
   </script>
 </body>
 </html>
